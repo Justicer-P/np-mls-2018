@@ -43,7 +43,7 @@ public class IndexClient implements IIndexClient {
     private static final String GROUP_KEY_SPLITTER = "~";
     public static final int DEFAULT_PARTITION = 5;
     public static final int PAGING_THRESHOLD = 50000;
-
+    public static final String MARATHON = "6marathon6";
     @Override
     public List<RowBean> findPageData(String type, SearchClause searchClause, int pageSize, int pageIndex, String... indices) {
         return getPageRowBeans(type, searchClause, pageSize, pageIndex, indices)._1;
@@ -220,6 +220,7 @@ public class IndexClient implements IIndexClient {
                 if (keyBuffer.toString().isEmpty()) {
                     key = bucket.getKey();
                 }
+                key = key.replaceAll(MARATHON, "/");
                 if (aggregationRecurser.getGroupMaps() != null) {
                     Map<String, Number[]> maps = aggregationRecurser.getGroupMaps();
                     Number[] result = maps.get(key);

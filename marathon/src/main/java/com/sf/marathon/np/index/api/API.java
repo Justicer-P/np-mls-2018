@@ -60,9 +60,11 @@ public class API {
         dataMap.put("sourceip", logData.getSourceIp());
         dataMap.put("destip", logData.getDestIp());
         dataMap.put("requrl", logData.getUrl());
+        dataMap.put("requestTimes", logData.getRequestTimes());
         dataMap.put("errorTimes", logData.getErrorTimes());
         dataMap.put("maxresponsetime", logData.getMaxReponseTime());
         dataMap.put("minReponseTime", logData.getMinReponseTime());
+        dataMap.put("avgReponseTime", logData.getAvgReponseTime());
         dataMap.put("ninePercentResponseTime", logData.getNinePercentResponseTime());
         indexClient.save("log_" + logData.getReqTime().substring(0, 10), logData.getType().toString(), dataMap);
     }
@@ -147,20 +149,53 @@ public class API {
     }
 
 
-    public Map<String, Number[]> mulTiAggregation(String reqTime,String startTime,String endTime) {
+    public Map<String, Number[]> mulTiAggregation(String startTime, String endTime) {
         GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(MAX, "maxresponsetime"),new AggregationClause(MIN, "minReponseTime"),
+                new AggregationClause(AVG, "avgReponseTime"),
                 new AggregationClause(AVG, "ninePercentResponseTime")}
-                ,  "requrl");
+                , "reqTime", "requrl");
         IndexClient indexClient = new IndexClient();
         DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
         long start = DateTime.parse(startTime, format).toDate().getTime();
         long end = DateTime.parse(endTime, format).toDate().getTime();
         SearchClause searchClause = SearchClause.newClause().greaterOrEqual("reqTime", start)
                 .and().lessOrEqual("reqTime", end);
-        return indexClient.mulTiAggregation(GroupType.URL_TYPE.toString(), SearchClause.newClause(), groupBy, "log_" + reqTime.substring(0, 10));
+        return indexClient.mulTiAggregation(GroupType.URL_TYPE.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
     }
 
-    public  Map<String, Number[]> groupByDestIP(String reqTime,String startTime,String endTime){
-        return null;
+    public Map<String, Number[]> sumRequestGroupByURL(String startTime, String endTime) {
+        GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(SUM, "requestTimes"), new AggregationClause(SUM, "errorTimes")}
+                , "reqTime", "requrl");
+        IndexClient indexClient = new IndexClient();
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+        long start = DateTime.parse(startTime, format).toDate().getTime();
+        long end = DateTime.parse(endTime, format).toDate().getTime();
+        SearchClause searchClause = SearchClause.newClause().greaterOrEqual("reqTime", start)
+                .and().lessOrEqual("reqTime", end);
+        return indexClient.mulTiAggregation(GroupType.URL_TYPE.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
+    }
+
+    public Map<String, Number[]> groupBySourceIP(String startTime, String endTime) {
+        GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(SUM, "requestTimes"), new AggregationClause(SUM, "errorTimes")}
+                , "reqTime", "sourceip");
+        IndexClient indexClient = new IndexClient();
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+        long start = DateTime.parse(startTime, format).toDate().getTime();
+        long end = DateTime.parse(endTime, format).toDate().getTime();
+        SearchClause searchClause = SearchClause.newClause().greaterOrEqual("reqTime", start)
+                .and().lessOrEqual("reqTime", end);
+        return indexClient.mulTiAggregation(GroupType.SOURCEIP.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
+    }
+
+    public Map<String, Number[]> groupByDestIP(String startTime, String endTime) {
+        GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(SUM, "requestTimes"), new AggregationClause(SUM, "errorTimes")}
+                , "reqTime", "destip");
+        IndexClient indexClient = new IndexClient();
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+        long start = DateTime.parse(startTime, format).toDate().getTime();
+        long end = DateTime.parse(endTime, format).toDate().getTime();
+        SearchClause searchClause = SearchClause.newClause().greaterOrEqual("reqTime", start)
+                .and().lessOrEqual("reqTime", end);
+        return indexClient.mulTiAggregation(GroupType.DESTIP.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
     }
 }
