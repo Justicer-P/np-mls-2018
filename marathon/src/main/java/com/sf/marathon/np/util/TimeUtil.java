@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.elasticsearch.common.joda.time.DateTime;
+
 public class TimeUtil {
 
 	private TimeUtil() {
@@ -29,12 +31,17 @@ public class TimeUtil {
 		return cal.getTime();
 	}
 	
+	public static String formatLong(String parttern, Long t) {
+		DateTime dateTime = new DateTime(t);
+		return dateTime.toString(parttern);
+	}
+	
 	private static Date convertString2Date(String parttern, String dateString) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat(parttern);
 		return sdf.parse(dateString);
 	}
 	
-	private static String convertDate2String(String parttern, Date dateString) {
+	public static String convertDate2String(String parttern, Date dateString) {
 		SimpleDateFormat sdf = new SimpleDateFormat(parttern);
 		return sdf.format(dateString);
 	}

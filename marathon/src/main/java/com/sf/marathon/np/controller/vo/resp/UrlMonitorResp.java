@@ -20,16 +20,16 @@ public class UrlMonitorResp implements Serializable{
 	private List<String> xAxis;
 	
 	// 最长响应时间
-	private String longestRespTime;
+	private List<String> longestRespTime;
 	
 	// 最短响应时间
-	private String shortestRespTime;
+	private List<String> shortestRespTime;
 	
 	// 平均响应时间
-	private String avgRespTime;
+	private List<String> avgRespTime;
 	
 	// 90%响应时间
-	private String NinetyPercentRespTime;
+	private List<String> ninetyPercentRespTime;
 
 	public List<String> getUrlRequestCount() {
 		return urlRequestCount;
@@ -63,36 +63,36 @@ public class UrlMonitorResp implements Serializable{
 		this.url = url;
 	}
 
-	public String getLongestRespTime() {
+	public List<String> getLongestRespTime() {
 		return longestRespTime;
 	}
 
-	public void setLongestRespTime(String longestRespTime) {
+	public void setLongestRespTime(List<String> longestRespTime) {
 		this.longestRespTime = longestRespTime;
 	}
 
-	public String getShortestRespTime() {
+	public List<String> getShortestRespTime() {
 		return shortestRespTime;
 	}
 
-	public void setShortestRespTime(String shortestRespTime) {
+	public void setShortestRespTime(List<String> shortestRespTime) {
 		this.shortestRespTime = shortestRespTime;
 	}
 
-	public String getAvgRespTime() {
+	public List<String> getAvgRespTime() {
 		return avgRespTime;
 	}
 
-	public void setAvgRespTime(String avgRespTime) {
+	public void setAvgRespTime(List<String> avgRespTime) {
 		this.avgRespTime = avgRespTime;
 	}
 
-	public String getNinetyPercentRespTime() {
-		return NinetyPercentRespTime;
+	public List<String> getNinetyPercentRespTime() {
+		return ninetyPercentRespTime;
 	}
 
-	public void setNinetyPercentRespTime(String ninetyPercentRespTime) {
-		NinetyPercentRespTime = ninetyPercentRespTime;
+	public void setNinetyPercentRespTime(List<String> ninetyPercentRespTime) {
+		this.ninetyPercentRespTime = ninetyPercentRespTime;
 	}
-	
+
 }
