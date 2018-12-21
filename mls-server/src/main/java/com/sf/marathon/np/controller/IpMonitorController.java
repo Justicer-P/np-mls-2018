@@ -29,13 +29,25 @@ public class IpMonitorController extends BaseController{
 	@PostMapping("/sourceIpMonitor")
 	@ResponseBody
 	public RestResponse<IpMonitorResp> sourceIpMonitor(@RequestBody IpMonitorReq req) {
-		return handle(r -> r.setResult(ipMonitorService.sourceIpMonitor(req)));
+		return handle(r -> {
+			try {
+				r.setResult(ipMonitorService.sourceIpMonitor(req));
+			} catch (Exception e) {
+				r.setMsg(e.getMessage());
+			}
+		});
 	}
 	
 	@PostMapping("/destIpMonitor")
 	@ResponseBody
 	public RestResponse<IpMonitorResp> destIpMonitor(@RequestBody IpMonitorReq req) {
-		return handle(r -> r.setResult(ipMonitorService.destIpMonitor(req)));
+		return handle(r -> {
+			try {
+				r.setResult(ipMonitorService.destIpMonitor(req));
+			} catch (Exception e) {
+				r.setMsg(e.getMessage());
+			}
+		});
 	}
 	
 	@PostMapping("/realTimeMonitor")

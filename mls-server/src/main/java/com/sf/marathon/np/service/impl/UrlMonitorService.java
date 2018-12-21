@@ -11,20 +11,21 @@ public class UrlMonitorService implements IUrlMonitorService{
 
 	@Override
 	public AllUrlsResp getAllUrls() {
-		// TODO Auto-generated method stub
-		return null;
+		AllUrlsResp resp = new AllUrlsResp();
+		resp.setUrls(null);
+		return resp;
 	}
 
 	@Override
 	public UrlMonitorResp urlMonitor() {
-		// TODO Auto-generated method stub
-		return null;
+		UrlMonitorResp resp = new UrlMonitorResp();
+		return resp;
 	}
 
 	@Override
 	public UrlMonitorResp urlMonitorSummary() {
-		// TODO Auto-generated method stub
-		return null;
+		UrlMonitorResp resp = new UrlMonitorResp();
+		return resp;
 	}
 
 }
