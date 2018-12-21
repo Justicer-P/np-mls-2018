@@ -2,8 +2,10 @@ package com.sf.marathon.np.service.impl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +41,16 @@ public class UrlMonitorService implements IUrlMonitorService{
 		List<String> xAxis = new ArrayList<>();
 		List<String> urlRequestCount = new ArrayList<>();
 		List<String> urlFailCount = new ArrayList<>();
+		Set<String> urls = new HashSet<>();
 		sortedResult.forEach((k, v) -> {
-			String time = TimeUtil.formatLong("yyyy-MM-dd HH:mm", Long.valueOf(k.substring(0, k.indexOf("~"))));
+			int index = k.indexOf("~");
+			String time = TimeUtil.formatLong("yyyy-MM-dd HH:mm", Long.valueOf(k.substring(0, index)));
 			xAxis.add(time);
+			urls.add(k.substring(index + 1));
 			urlRequestCount.add(String.valueOf(v[0]));
 			urlFailCount.add(String.valueOf(v[1]));
 		});
-		resp.setUrl(req.getUrl());
+		resp.setUrls(new ArrayList<String>(urls));
 		resp.setxAxis(xAxis);
 		resp.setUrlRequestCount(urlRequestCount);
 		resp.setUrlFailCount(urlFailCount);
@@ -66,15 +71,18 @@ public class UrlMonitorService implements IUrlMonitorService{
 		List<String> shortestRespTime = new ArrayList<>();
 		List<String> avgRespTime = new ArrayList<>();
 		List<String> ninetyPercentRespTime = new ArrayList<>();
+		Set<String> urls = new HashSet<>();
 		sortedResult.forEach((k, v) -> {
-			String time = TimeUtil.formatLong("yyyy-MM-dd HH:mm", Long.valueOf(k.substring(0, k.indexOf("~"))));
+			int index = k.indexOf("~");
+			String time = TimeUtil.formatLong("yyyy-MM-dd HH:mm", Long.valueOf(k.substring(0, index)));
 			xAxis.add(time);
+			urls.add(k.substring(index + 1));
 			longestRespTime.add(String.valueOf(v[0]));
 			shortestRespTime.add(String.valueOf(v[1]));
 			avgRespTime.add(String.valueOf(v[2]));
 			ninetyPercentRespTime.add(String.valueOf(v[2]));
 		});
-		resp.setUrl(req.getUrl());
+		resp.setUrls(new ArrayList<String>(urls));
 		resp.setxAxis(xAxis);
 		resp.setLongestRespTime(longestRespTime);
 		resp.setShortestRespTime(shortestRespTime);
