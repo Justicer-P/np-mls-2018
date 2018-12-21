@@ -17,8 +17,8 @@ public class TimeUtil {
 		return new Date();
 	}
 
-	public static String getDateYYDD() {
-		SimpleDateFormat sdf = new SimpleDateFormat("MMdd");
+	public static String getDateymd() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return sdf.format(now());
 	}
 
@@ -59,10 +59,6 @@ public class TimeUtil {
 
 		}
 		return list;
-	}
-
-	public static void main(String[] args) {
-		System.out.println(TimeUtil.getDateYYDD());
 	}
 
 }
