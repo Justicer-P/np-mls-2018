@@ -19,8 +19,8 @@ import com.sf.marathon.np.service.IUrlMonitorService;
 import com.sf.marathon.np.util.TimeUtil;
 
 @Service
-public class UrlMonitorService implements IUrlMonitorService{
-	
+public class UrlMonitorService implements IUrlMonitorService {
+
 	@Autowired
 	private API api;
 
@@ -32,9 +32,8 @@ public class UrlMonitorService implements IUrlMonitorService{
 	@Override
 	public UrlMonitorResp urlMonitor(UrlMonitorReq req) throws ParseException {
 		UrlMonitorResp resp = new UrlMonitorResp();
-//		resp.setxAxis(TimeUtil.getIntervalTimeList(req.getBeginTime(), req.getEndTime(), 1));
-		Map<String, Number[]> result = api.mulTiAggregation(TimeUtil.getDateymd(), req.getBeginTime(), req.getEndTime());
-		Map<String, Number[]> sortedResult = new TreeMap<>((o1, o2)-> {
+		Map<String, Number[]> result = api.sumRequestGroupByURL(req.getBeginTime(), req.getEndTime());
+		Map<String, Number[]> sortedResult = new TreeMap<>((o1, o2) -> {
 			return o1.substring(0, o1.indexOf("~")).compareTo(o2.substring(0, o1.indexOf("~")));
 		});
 		sortedResult.putAll(result);
@@ -60,9 +59,8 @@ public class UrlMonitorService implements IUrlMonitorService{
 	@Override
 	public UrlMonitorResp urlMonitorSummary(UrlMonitorReq req) throws ParseException {
 		UrlMonitorResp resp = new UrlMonitorResp();
-//		resp.setxAxis(TimeUtil.getIntervalTimeList(req.getBeginTime(), req.getEndTime(), 1));
-		Map<String, Number[]> result = api.mulTiAggregation(TimeUtil.getDateymd(), req.getBeginTime(), req.getEndTime());
-		Map<String, Number[]> sortedResult = new TreeMap<>((o1, o2)-> {
+		Map<String, Number[]> result = api.mulTiAggregation(req.getBeginTime(), req.getEndTime());
+		Map<String, Number[]> sortedResult = new TreeMap<>((o1, o2) -> {
 			return o1.substring(0, o1.indexOf("~")).compareTo(o2.substring(0, o1.indexOf("~")));
 		});
 		sortedResult.putAll(result);
