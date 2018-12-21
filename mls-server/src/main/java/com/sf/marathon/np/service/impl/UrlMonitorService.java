@@ -1,30 +1,34 @@
 package com.sf.marathon.np.service.impl;
 
+import java.text.ParseException;
+
 import org.springframework.stereotype.Service;
 
+import com.sf.marathon.np.controller.vo.req.UrlMonitorReq;
 import com.sf.marathon.np.controller.vo.resp.AllUrlsResp;
 import com.sf.marathon.np.controller.vo.resp.UrlMonitorResp;
 import com.sf.marathon.np.service.IUrlMonitorService;
+import com.sf.marathon.np.util.TimeUtil;
 
 @Service
 public class UrlMonitorService implements IUrlMonitorService{
 
 	@Override
 	public AllUrlsResp getAllUrls() {
-		AllUrlsResp resp = new AllUrlsResp();
-		resp.setUrls(null);
+		return null;
+	}
+
+	@Override
+	public UrlMonitorResp urlMonitor(UrlMonitorReq req) throws ParseException {
+		UrlMonitorResp resp = new UrlMonitorResp();
+		resp.setxAxis(TimeUtil.getIntervalTimeList(req.getBeginTime(), req.getEndTime(), 1));
 		return resp;
 	}
 
 	@Override
-	public UrlMonitorResp urlMonitor() {
+	public UrlMonitorResp urlMonitorSummary(UrlMonitorReq req) throws ParseException {
 		UrlMonitorResp resp = new UrlMonitorResp();
-		return resp;
-	}
-
-	@Override
-	public UrlMonitorResp urlMonitorSummary() {
-		UrlMonitorResp resp = new UrlMonitorResp();
+		resp.setxAxis(TimeUtil.getIntervalTimeList(req.getBeginTime(), req.getEndTime(), 1));
 		return resp;
 	}
 

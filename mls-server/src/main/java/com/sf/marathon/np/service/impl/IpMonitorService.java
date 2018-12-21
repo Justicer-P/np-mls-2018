@@ -13,10 +13,7 @@ public class IpMonitorService implements IIpMonitorService{
 
 	@Override
 	public AllIpsResp getAllIps() {
-		AllIpsResp resp = new AllIpsResp();
-		resp.setDestIps(null);
-		resp.setSourceIps(null);
-		return resp;
+		return null;
 	}
 
 	@Override

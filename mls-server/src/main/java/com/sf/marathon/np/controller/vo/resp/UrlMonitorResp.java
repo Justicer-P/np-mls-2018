@@ -1,6 +1,7 @@
 package com.sf.marathon.np.controller.vo.resp;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class UrlMonitorResp implements Serializable{
 
@@ -10,10 +11,13 @@ public class UrlMonitorResp implements Serializable{
 	private String url;
 	
 	// 请求数
-	private String urlRequestCount;
+	private List<String> urlRequestCount;
 	
 	// 失败数
-	private String urlFailCount;
+	private List<String> urlFailCount;
+	
+	// x轴坐标
+	private List<String> xAxis;
 	
 	// 最长响应时间
 	private String longestRespTime;
@@ -27,28 +31,36 @@ public class UrlMonitorResp implements Serializable{
 	// 90%响应时间
 	private String NinetyPercentRespTime;
 
+	public List<String> getUrlRequestCount() {
+		return urlRequestCount;
+	}
+
+	public void setUrlRequestCount(List<String> urlRequestCount) {
+		this.urlRequestCount = urlRequestCount;
+	}
+
+	public List<String> getUrlFailCount() {
+		return urlFailCount;
+	}
+
+	public void setUrlFailCount(List<String> urlFailCount) {
+		this.urlFailCount = urlFailCount;
+	}
+
+	public List<String> getxAxis() {
+		return xAxis;
+	}
+
+	public void setxAxis(List<String> xAxis) {
+		this.xAxis = xAxis;
+	}
+
 	public String getUrl() {
 		return url;
 	}
 
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	public String getUrlRequestCount() {
-		return urlRequestCount;
-	}
-
-	public void setUrlRequestCount(String urlRequestCount) {
-		this.urlRequestCount = urlRequestCount;
-	}
-
-	public String getUrlFailCount() {
-		return urlFailCount;
-	}
-
-	public void setUrlFailCount(String urlFailCount) {
-		this.urlFailCount = urlFailCount;
 	}
 
 	public String getLongestRespTime() {
