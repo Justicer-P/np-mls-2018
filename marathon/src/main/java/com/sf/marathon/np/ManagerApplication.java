@@ -1,3 +1,5 @@
+package com.sf.marathon.np;
+
 import com.sf.marathon.np.index.domain.EsConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

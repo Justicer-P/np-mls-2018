@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EsConfig implements InitializingBean {
-    private static EsConfig esConfig = new EsConfig();
+    private static EsConfig esConfig;
 
     private EsConfig() {
 
@@ -29,10 +29,11 @@ public class EsConfig implements InitializingBean {
     public static EsConfig getInstance() {
         return esConfig;
     }
-    @Value("cluster.name")
+
+    @Value("${cluster.name}")
     private String clusterName;
 
-    @Value("es.url")
+    @Value("${es.url}")
     private String esUrl;
 
     private Integer workerCount;
