@@ -1,6 +1,10 @@
 package com.sf.marathon.np.service.impl;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,24 @@ public class UrlMonitorService implements IUrlMonitorService{
 	public UrlMonitorResp urlMonitor(UrlMonitorReq req) throws ParseException {
 		UrlMonitorResp resp = new UrlMonitorResp();
 		resp.setxAxis(TimeUtil.getIntervalTimeList(req.getBeginTime(), req.getEndTime(), 1));
+		Map<String, Number[]> result = api.mulTiAggregation(TimeUtil.getDateymd(), req.getBeginTime(), req.getEndTime());
+		Map<String, Number[]> sortedResult = new TreeMap<>((o1, o2)-> {
+			return o1.substring(0, o1.indexOf("~")).compareTo(o2.substring(0, o1.indexOf("~")));
+		});
+		sortedResult.putAll(result);
+		List<String> xAxis = new ArrayList<>();
+		List<String> urlRequestCount = new ArrayList<>();
+		List<String> urlFailCount = new ArrayList<>();
+		sortedResult.forEach((k, v) -> {
+			String time = TimeUtil.formatLong("yyyy-MM-dd HH:mm", Long.valueOf(k.substring(0, k.indexOf("~"))));
+			xAxis.add(time);
+			urlRequestCount.add(String.valueOf(v[0]));
+			urlFailCount.add(String.valueOf(v[1]));
+		});
+		resp.setUrl(req.getUrl());
+		resp.setxAxis(xAxis);
+		resp.setUrlRequestCount(urlRequestCount);
+		resp.setUrlFailCount(urlFailCount);
 		return resp;
 	}
 
@@ -34,6 +56,30 @@ public class UrlMonitorService implements IUrlMonitorService{
 	public UrlMonitorResp urlMonitorSummary(UrlMonitorReq req) throws ParseException {
 		UrlMonitorResp resp = new UrlMonitorResp();
 		resp.setxAxis(TimeUtil.getIntervalTimeList(req.getBeginTime(), req.getEndTime(), 1));
+		Map<String, Number[]> result = api.mulTiAggregation(TimeUtil.getDateymd(), req.getBeginTime(), req.getEndTime());
+		Map<String, Number[]> sortedResult = new TreeMap<>((o1, o2)-> {
+			return o1.substring(0, o1.indexOf("~")).compareTo(o2.substring(0, o1.indexOf("~")));
+		});
+		sortedResult.putAll(result);
+		List<String> xAxis = new ArrayList<>();
+		List<String> longestRespTime = new ArrayList<>();
+		List<String> shortestRespTime = new ArrayList<>();
+		List<String> avgRespTime = new ArrayList<>();
+		List<String> ninetyPercentRespTime = new ArrayList<>();
+		sortedResult.forEach((k, v) -> {
+			String time = TimeUtil.formatLong("yyyy-MM-dd HH:mm", Long.valueOf(k.substring(0, k.indexOf("~"))));
+			xAxis.add(time);
+			longestRespTime.add(String.valueOf(v[0]));
+			shortestRespTime.add(String.valueOf(v[1]));
+			avgRespTime.add(String.valueOf(v[2]));
+			ninetyPercentRespTime.add(String.valueOf(v[2]));
+		});
+		resp.setUrl(req.getUrl());
+		resp.setxAxis(xAxis);
+		resp.setLongestRespTime(longestRespTime);
+		resp.setShortestRespTime(shortestRespTime);
+		resp.setAvgRespTime(avgRespTime);
+		resp.setNinetyPercentRespTime(ninetyPercentRespTime);
 		return resp;
 	}
 
