@@ -139,8 +139,13 @@ public class IndexClient implements IIndexClient {
             if(ExceptionUtils.isException(e, IndexMissingException.class)){
                 IndexAdminClient indexAdminClient = new IndexAdminClient();
                 indexAdminClient.createDb(indices[0]);
-                indexAdminClient.createTable(indices[0],type, Lists.newArrayList(FieldType.type("writeDate", IndexFieldType.LONG),
-                FieldType.type("sourceip"),FieldType.type("destip"),FieldType.type("status"),FieldType.type("url"),FieldType.type("responsetime",IndexFieldType.DOUBLE)),true);
+                indexAdminClient.createTable(indices[0],type, Lists.newArrayList(FieldType.type("reqTime", IndexFieldType.LONG),
+                        FieldType.type("sourceip"),FieldType.type("destip"),FieldType.type("requestTimes",IndexFieldType.INT)
+                        ,FieldType.type("url"),FieldType.type("errorTimes",IndexFieldType.INT)
+                        ,FieldType.type("minReponseTime",IndexFieldType.DOUBLE),
+                        FieldType.type("minReponseTime",IndexFieldType.DOUBLE),
+                        FieldType.type("ninePercentResponseTime",IndexFieldType.DOUBLE)
+                ),true);
                 return mulTiAggregation(type,searchClause,groupBy,indices);
             }else {
                 throw e;
@@ -157,8 +162,13 @@ public class IndexClient implements IIndexClient {
             if(ExceptionUtils.isException(e, IndexMissingException.class)){
                 IndexAdminClient indexAdminClient = new IndexAdminClient();
                 indexAdminClient.createDb(index);
-                indexAdminClient.createTable(index,type, Lists.newArrayList(FieldType.type("writeDate", IndexFieldType.LONG),
-                        FieldType.type("sourceip"),FieldType.type("destip"),FieldType.type("status"),FieldType.type("url"),FieldType.type("responsetime",IndexFieldType.DOUBLE)),true);
+                indexAdminClient.createTable(index,type, Lists.newArrayList(FieldType.type("reqTime", IndexFieldType.LONG),
+                        FieldType.type("sourceip"),FieldType.type("destip"),FieldType.type("requestTimes",IndexFieldType.INT)
+                        ,FieldType.type("url"),FieldType.type("errorTimes",IndexFieldType.INT)
+                        ,FieldType.type("minReponseTime",IndexFieldType.DOUBLE),
+                        FieldType.type("minReponseTime",IndexFieldType.DOUBLE),
+                        FieldType.type("ninePercentResponseTime",IndexFieldType.DOUBLE)
+                ),true);
                 save(index,type,dataMap);
             }else {
                 throw e;

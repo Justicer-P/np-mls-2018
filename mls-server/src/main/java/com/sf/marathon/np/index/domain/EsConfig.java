@@ -1,5 +1,9 @@
 package com.sf.marathon.np.index.domain;
 
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * 描述:
  * <p>
@@ -14,8 +18,9 @@ package com.sf.marathon.np.index.domain;
  * @author 204062
  * @since 1.0
  */
-public class EsConfig {
-    private static EsConfig esConfig = new EsConfig();
+@Component
+public class EsConfig implements InitializingBean {
+    private static EsConfig esConfig ;
 
     private EsConfig() {
 
@@ -24,9 +29,10 @@ public class EsConfig {
     public static EsConfig getInstance() {
         return esConfig;
     }
-
+    @Value("cluster.name")
     private String clusterName;
 
+    @Value("es.url")
     private String esUrl;
 
     private Integer workerCount;
@@ -53,5 +59,10 @@ public class EsConfig {
 
     public void setWorkerCount(Integer workerCount) {
         this.workerCount = workerCount;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        esConfig = this;
     }
 }
