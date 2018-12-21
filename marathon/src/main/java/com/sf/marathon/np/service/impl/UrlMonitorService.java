@@ -34,7 +34,7 @@ public class UrlMonitorService implements IUrlMonitorService {
 		UrlMonitorResp resp = new UrlMonitorResp();
 		Map<String, Number[]> result = api.sumRequestGroupByURL(req.getBeginTime(), req.getEndTime());
 		Map<String, Number[]> sortedResult = new TreeMap<>((o1, o2) -> {
-			return o1.substring(0, o1.indexOf("~")).compareTo(o2.substring(0, o1.indexOf("~")));
+			return o1.substring(0, o1.indexOf("~")).compareTo(o2.substring(0, o2.indexOf("~")));
 		});
 		sortedResult.putAll(result);
 		List<String> xAxis = new ArrayList<>();
@@ -61,7 +61,7 @@ public class UrlMonitorService implements IUrlMonitorService {
 		UrlMonitorResp resp = new UrlMonitorResp();
 		Map<String, Number[]> result = api.mulTiAggregation(req.getBeginTime(), req.getEndTime());
 		Map<String, Number[]> sortedResult = new TreeMap<>((o1, o2) -> {
-			return o1.substring(0, o1.indexOf("~")).compareTo(o2.substring(0, o1.indexOf("~")));
+			return o1.substring(0, o1.indexOf("~")).compareTo(o2.substring(0, o2.indexOf("~")));
 		});
 		sortedResult.putAll(result);
 		List<String> xAxis = new ArrayList<>();
