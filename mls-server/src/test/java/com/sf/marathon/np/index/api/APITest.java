@@ -1,6 +1,7 @@
 package com.sf.marathon.np.index.api;
 
 import com.sf.marathon.np.index.api.domain.LogData;
+import com.sf.marathon.np.index.domain.EsConfig;
 import org.elasticsearch.common.collect.Maps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,13 +27,15 @@ import static org.junit.Assert.*;
  * @author 204062
  * @since 1.0
  */
-@RunWith(SpringJUnit4ClassRunner.class) //使用junit4进行测试
+//@RunWith(SpringJUnit4ClassRunner.class) //使用junit4进行测试
 //@ContextConfiguration(locations = {"classpath:META-INF/spring/beans-mybatis-config.xml"})
 public class APITest {
-    @Autowired
+//    @Autowired
     private API api;
     @Test
     public void save() {
+        EsConfig.getInstance().setClusterName("elasticsearch");
+        EsConfig.getInstance().setEsUrl("10.203.97.8:9300");
 //        Map<String, Object> dataMap = Maps.newHashMap();
 //        dataMap.put("writeDate", System.currentTimeMillis());
 //        dataMap.put("sourceip", "10.116.88.11");
@@ -51,7 +54,12 @@ public class APITest {
 
     @Test
     public void mulTiAggregation() {
-        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-12-21", GroupType.URL_TYPE);
+        API api = new API();
+        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-12-21","2018-12-21 15:10","2018-12-21 15:30");
         System.out.println("stringMap = " + stringMap);
+    }
+
+    @Test
+    public void findPageData() {
     }
 }

@@ -4,7 +4,6 @@ import com.sf.marathon.np.index.api.domain.LogData;
 import com.sf.marathon.np.index.clause.*;
 import com.sf.marathon.np.index.client.ElasticClient;
 import com.sf.marathon.np.index.client.IndexClient;
-import com.sf.marathon.np.index.domain.EsConfig;
 import com.sf.marathon.np.index.domain.KeyBean;
 import com.sf.marathon.np.index.domain.RowBean;
 import com.sf.marathon.np.index.exception.ESClientException;
@@ -27,9 +26,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 
-import static com.sf.marathon.np.index.clause.AggregationClause.AggregationType.AVG;
-import static com.sf.marathon.np.index.clause.AggregationClause.AggregationType.MAX;
-import static com.sf.marathon.np.index.clause.AggregationClause.AggregationType.MIN;
+import static com.sf.marathon.np.index.clause.AggregationClause.AggregationType.*;
 import static com.sf.marathon.np.index.client.IndexClient.PAGING_THRESHOLD;
 
 /**
@@ -62,7 +59,7 @@ public class API {
         dataMap.put("reqTime", DateTime.parse(sss, format).toDate().getTime());
         dataMap.put("sourceip", logData.getSourceIp());
         dataMap.put("destip", logData.getDestIp());
-        dataMap.put("url", logData.getUrl());
+        dataMap.put("requrl", logData.getUrl());
         dataMap.put("errorTimes", logData.getErrorTimes());
         dataMap.put("maxresponsetime", logData.getMaxReponseTime());
         dataMap.put("minReponseTime", logData.getMinReponseTime());
@@ -153,17 +150,17 @@ public class API {
     public Map<String, Number[]> mulTiAggregation(String reqTime,String startTime,String endTime) {
         GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(MAX, "maxresponsetime"),new AggregationClause(MIN, "minReponseTime"),
                 new AggregationClause(AVG, "ninePercentResponseTime")}
-                , "reqTime", "url");
+                ,  "requrl");
         IndexClient indexClient = new IndexClient();
         DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
         long start = DateTime.parse(startTime, format).toDate().getTime();
         long end = DateTime.parse(endTime, format).toDate().getTime();
-        return indexClient.mulTiAggregation(GroupType.URL_TYPE.toString(), SearchClause.newClause().greaterOrEqual("reqTime",start)
-                .and().lessOrEqual("reqTime",end), groupBy, "log_" + reqTime.substring(0, 10));
+        SearchClause searchClause = SearchClause.newClause().greaterOrEqual("reqTime", start)
+                .and().lessOrEqual("reqTime", end);
+        return indexClient.mulTiAggregation(GroupType.URL_TYPE.toString(), SearchClause.newClause(), groupBy, "log_" + reqTime.substring(0, 10));
     }
 
     public  Map<String, Number[]> groupByDestIP(String reqTime,String startTime,String endTime){
-
         return null;
     }
 }
