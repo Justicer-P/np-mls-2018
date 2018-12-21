@@ -164,9 +164,10 @@ public class IndexClient implements IIndexClient {
                 indexAdminClient.createDb(index);
                 indexAdminClient.createTable(index,type, Lists.newArrayList(FieldType.type("reqTime", IndexFieldType.LONG),
                         FieldType.type("sourceip"), FieldType.type("destip"), FieldType.type("requestTimes", IndexFieldType.INT)
-                        , FieldType.type("url"), FieldType.type("errorTimes", IndexFieldType.INT)
+                        , FieldType.type("requrl"), FieldType.type("errorTimes", IndexFieldType.INT)
                         , FieldType.type("minReponseTime", IndexFieldType.DOUBLE),
                         FieldType.type("minReponseTime", IndexFieldType.DOUBLE),
+                        FieldType.type("avgReponseTime", IndexFieldType.DOUBLE),
                         FieldType.type("ninePercentResponseTime", IndexFieldType.DOUBLE)
                 ),true);
                 save(index,type,dataMap);
