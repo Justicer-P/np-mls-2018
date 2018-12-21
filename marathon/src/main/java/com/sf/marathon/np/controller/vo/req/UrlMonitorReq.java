@@ -6,6 +6,9 @@ public class UrlMonitorReq implements Serializable{
 
 	private static final long serialVersionUID = -3369036404849706523L;
 	
+	// url
+	private String url;
+	
 	// 开始时间
 	private String beginTime;
 	
@@ -14,6 +17,14 @@ public class UrlMonitorReq implements Serializable{
 
 	public String getBeginTime() {
 		return beginTime;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public void setBeginTime(String beginTime) {

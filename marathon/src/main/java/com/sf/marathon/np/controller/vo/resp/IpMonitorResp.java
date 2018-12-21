@@ -3,27 +3,60 @@ package com.sf.marathon.np.controller.vo.resp;
 import java.io.Serializable;
 import java.util.List;
 
-public class IpMonitorResp implements Serializable{
-	
+public class IpMonitorResp implements Serializable {
+
 	private static final long serialVersionUID = -4610080229906909475L;
+
+	// ip
+	private String ip;
+
+	// srcOrDestIps
+	private List<String> srcOrDestIps;
+
+	// ips
+	private List<String> ips;
 
 	// 请求数
 	private List<String> ipRequestCount;
-	
+
 	// 失败数
 	private List<String> ipFailCount;
-	
+
 	// x轴坐标
 	private List<String> xAxis;
-	
+
 	// 实时请求IP
 	private String realTimeIp;
-	
+
 	// 实时请求时间
 	private String realTimeReqTime;
-	
+
 	// 实时请求数
 	private String realTimeCount;
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public List<String> getSrcOrDestIps() {
+		return srcOrDestIps;
+	}
+
+	public void setSrcOrDestIps(List<String> srcOrDestIps) {
+		this.srcOrDestIps = srcOrDestIps;
+	}
+
+	public List<String> getIps() {
+		return ips;
+	}
+
+	public void setIps(List<String> ips) {
+		this.ips = ips;
+	}
 
 	public List<String> getIpRequestCount() {
 		return ipRequestCount;

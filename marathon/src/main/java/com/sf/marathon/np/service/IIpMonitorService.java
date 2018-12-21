@@ -8,10 +8,8 @@ public interface IIpMonitorService {
 	
 	public AllIpsResp getAllIps();
 	
-	public IpMonitorResp sourceIpMonitor(IpMonitorReq req) throws Exception;
-	
-	public IpMonitorResp destIpMonitor(IpMonitorReq req) throws Exception;
+	public IpMonitorResp ipMonitor(String type, IpMonitorReq req, boolean isFirst) throws Exception;
 	
 	public IpMonitorResp realTimeMonitor(IpMonitorReq req);
-	
+
 }
