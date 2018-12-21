@@ -30,7 +30,7 @@ public class UrlMonitorService implements IUrlMonitorService{
 	@Override
 	public UrlMonitorResp urlMonitor(UrlMonitorReq req) throws ParseException {
 		UrlMonitorResp resp = new UrlMonitorResp();
-		resp.setxAxis(TimeUtil.getIntervalTimeList(req.getBeginTime(), req.getEndTime(), 1));
+//		resp.setxAxis(TimeUtil.getIntervalTimeList(req.getBeginTime(), req.getEndTime(), 1));
 		Map<String, Number[]> result = api.mulTiAggregation(TimeUtil.getDateymd(), req.getBeginTime(), req.getEndTime());
 		Map<String, Number[]> sortedResult = new TreeMap<>((o1, o2)-> {
 			return o1.substring(0, o1.indexOf("~")).compareTo(o2.substring(0, o1.indexOf("~")));
@@ -55,7 +55,7 @@ public class UrlMonitorService implements IUrlMonitorService{
 	@Override
 	public UrlMonitorResp urlMonitorSummary(UrlMonitorReq req) throws ParseException {
 		UrlMonitorResp resp = new UrlMonitorResp();
-		resp.setxAxis(TimeUtil.getIntervalTimeList(req.getBeginTime(), req.getEndTime(), 1));
+//		resp.setxAxis(TimeUtil.getIntervalTimeList(req.getBeginTime(), req.getEndTime(), 1));
 		Map<String, Number[]> result = api.mulTiAggregation(TimeUtil.getDateymd(), req.getBeginTime(), req.getEndTime());
 		Map<String, Number[]> sortedResult = new TreeMap<>((o1, o2)-> {
 			return o1.substring(0, o1.indexOf("~")).compareTo(o2.substring(0, o1.indexOf("~")));
