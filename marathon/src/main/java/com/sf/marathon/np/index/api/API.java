@@ -23,6 +23,7 @@ import org.elasticsearch.search.sort.GeoDistanceSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -62,10 +63,11 @@ public class API {
         dataMap.put("requrl", logData.getUrl());
         dataMap.put("requestTimes", logData.getRequestTimes());
         dataMap.put("errorTimes", logData.getErrorTimes());
-        dataMap.put("maxresponsetime", logData.getMaxReponseTime());
-        dataMap.put("minReponseTime", logData.getMinReponseTime());
-        dataMap.put("avgReponseTime", logData.getAvgReponseTime());
+        dataMap.put("maxResponseTime", logData.getMaxReponseTime());
+        dataMap.put("minResponseTime", logData.getMinReponseTime());
+        dataMap.put("avgResponseTime", logData.getAvgReponseTime());
         dataMap.put("ninePercentResponseTime", logData.getNinePercentResponseTime());
+        dataMap.put("__index_tm__", new Date());
         indexClient.save("log_" + logData.getReqTime().substring(0, 10), logData.getType().toString(), dataMap);
     }
 
@@ -155,8 +157,8 @@ public class API {
     }
 
     public Map<String, Number[]> mulTiAggregation(String startTime, String endTime, String url) {
-        GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(MAX, "maxresponsetime"), new AggregationClause(MIN, "minReponseTime"),
-                new AggregationClause(AVG, "avgReponseTime"),
+        GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(MAX, "maxResponseTime"), new AggregationClause(MIN, "minResponseTime"),
+                new AggregationClause(AVG, "avgResponseTime"),
                 new AggregationClause(AVG, "ninePercentResponseTime")}
                 , "reqTime", "requrl");
         IndexClient indexClient = new IndexClient();
@@ -187,7 +189,7 @@ public class API {
         if (!StringUtil.isEmpty(url)) {
             searchClause.and().equal("requrl", url);
         }
-        return indexClient.mulTiAggregation(GroupType.URL_TYPE.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
+        return indexClient.mulTiAggregation(GroupType.URL_TIME.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
     }
 
     public Map<String, Number[]> sumRequestGroupByURL(String startTime, String endTime) {
@@ -208,7 +210,7 @@ public class API {
         SearchClause searchClause = SearchClause.newClause().greaterOrEqual("reqTime", start)
                 .and().lessOrEqual("reqTime", end);
         if (!StringUtil.isEmpty(sourceIp)) {
-            searchClause.equal("sourceip", sourceIp);
+            searchClause.and().equal("sourceip", sourceIp);
         }
         return indexClient.mulTiAggregation(GroupType.SOURCEIP.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
     }
@@ -223,7 +225,7 @@ public class API {
         SearchClause searchClause = SearchClause.newClause().greaterOrEqual("reqTime", start)
                 .and().lessOrEqual("reqTime", end);
         if (!StringUtil.isEmpty(destIp)) {
-            searchClause.equal("destip", destIp);
+            searchClause.and().equal("destip", destIp);
         }
         return indexClient.mulTiAggregation(GroupType.DESTIP.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
     }

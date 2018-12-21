@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EsConfig implements InitializingBean {
-    private static EsConfig esConfig;
+    private static EsConfig esConfig = new EsConfig();
 
     private EsConfig() {
 

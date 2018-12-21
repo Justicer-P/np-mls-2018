@@ -17,5 +17,5 @@ package com.sf.marathon.np.index.util;
 public class Constant {
     public static final String ELASTIC_ORDER_BY_KEY = "_uid";
     public static final int DEFAULT_ES_SHARDS = 5;
-    public static final int DEFAULT_ES_REPLICAS = 2;
+    public static final int DEFAULT_ES_REPLICAS = 1;
 }
