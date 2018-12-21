@@ -1,8 +1,7 @@
 package com.sf.marathon.np.index.client;
-
-import com.sf.marathon.index.domain.FieldType;
-import com.sf.marathon.index.domain.IndexFieldType;
-import com.sf.marathon.index.exception.ESClientException;
+import com.sf.marathon.np.index.domain.FieldType;
+import com.sf.marathon.np.index.domain.IndexFieldType;
+import com.sf.marathon.np.index.exception.ESClientException;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
@@ -21,7 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.sf.marathon.index.util.Constant.*;
+import static com.sf.marathon.np.index.util.Constant.DEFAULT_ES_REPLICAS;
+import static com.sf.marathon.np.index.util.Constant.DEFAULT_ES_SHARDS;
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 /**

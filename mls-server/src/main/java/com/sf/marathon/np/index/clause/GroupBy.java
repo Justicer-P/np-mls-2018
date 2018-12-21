@@ -1,5 +1,5 @@
 package com.sf.marathon.np.index.clause;
-import com.sf.marathon.index.util.Tuple;
+import com.sf.marathon.np.index.util.Tuple;
 import org.elasticsearch.common.base.Preconditions;
 import org.elasticsearch.search.aggregations.AbstractAggregationBuilder;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;

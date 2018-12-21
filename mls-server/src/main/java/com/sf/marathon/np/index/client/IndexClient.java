@@ -1,14 +1,14 @@
 package com.sf.marathon.np.index.client;
 
-import com.sf.marathon.index.clause.*;
-import com.sf.marathon.index.domain.FieldType;
-import com.sf.marathon.index.domain.IndexFieldType;
-import com.sf.marathon.index.domain.KeyBean;
-import com.sf.marathon.index.domain.RowBean;
-import com.sf.marathon.index.exception.ESClientException;
-import com.sf.marathon.index.util.ExceptionUtils;
-import com.sf.marathon.index.util.StringUtil;
-import com.sf.marathon.index.util.Tuple;
+import com.sf.marathon.np.index.clause.*;
+import com.sf.marathon.np.index.domain.FieldType;
+import com.sf.marathon.np.index.domain.IndexFieldType;
+import com.sf.marathon.np.index.domain.KeyBean;
+import com.sf.marathon.np.index.domain.RowBean;
+import com.sf.marathon.np.index.exception.ESClientException;
+import com.sf.marathon.np.index.util.ExceptionUtils;
+import com.sf.marathon.np.index.util.StringUtil;
+import com.sf.marathon.np.index.util.Tuple;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;

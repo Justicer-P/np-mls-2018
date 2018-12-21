@@ -1,6 +1,6 @@
 package com.sf.marathon.np.index.client;
 
-import com.sf.marathon.index.domain.FieldType;
+import com.sf.marathon.np.index.domain.FieldType;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.sf.marathon.np.index.client;
 
-import com.sf.marathon.index.domain.EsConfig;
+import com.sf.marathon.np.index.domain.EsConfig;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.ImmutableSettings;

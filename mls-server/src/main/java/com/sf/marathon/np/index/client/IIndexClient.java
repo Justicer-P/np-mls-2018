@@ -1,8 +1,8 @@
 package com.sf.marathon.np.index.client;
 
-import com.sf.marathon.index.clause.GroupBy;
-import com.sf.marathon.index.clause.SearchClause;
-import com.sf.marathon.index.domain.RowBean;
+import com.sf.marathon.np.index.clause.GroupBy;
+import com.sf.marathon.np.index.clause.SearchClause;
+import com.sf.marathon.np.index.domain.RowBean;
 
 import java.util.List;
 import java.util.Map;

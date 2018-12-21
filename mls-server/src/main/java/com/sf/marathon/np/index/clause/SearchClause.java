@@ -1,8 +1,8 @@
 package com.sf.marathon.np.index.clause;
 
-import com.sf.marathon.index.exception.ESClientException;
-import com.sf.marathon.index.util.Constant;
-import com.sf.marathon.index.util.StringUtil;
+import com.sf.marathon.np.index.exception.ESClientException;
+import com.sf.marathon.np.index.util.Constant;
+import com.sf.marathon.np.index.util.StringUtil;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.common.bytes.BytesReference;
 import org.elasticsearch.common.collect.Lists;
