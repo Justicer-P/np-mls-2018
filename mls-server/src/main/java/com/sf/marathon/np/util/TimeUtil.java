@@ -25,4 +25,9 @@ public class TimeUtil {
 		cal.add(Calendar.MINUTE, min);
 		return cal.getTime();
 	}
+	
+	public static void main(String[] args) {
+		System.out.println(TimeUtil.getDateYYDD());
+	}
+	
 }
