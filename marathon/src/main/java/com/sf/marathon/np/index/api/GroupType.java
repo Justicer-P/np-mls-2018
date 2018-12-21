@@ -17,5 +17,6 @@ package com.sf.marathon.np.index.api;
 public enum GroupType {
     SOURCEIP,
     DESTIP,
-    URL_TYPE
+    URL_TYPE,
+    URL_TIME,
 }

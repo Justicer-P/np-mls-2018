@@ -1,5 +1,6 @@
 package com.sf.marathon.np.index.client;
 
+import com.sf.marathon.np.index.api.domain.LogData;
 import com.sf.marathon.np.index.clause.GroupBy;
 import com.sf.marathon.np.index.clause.SearchClause;
 import com.sf.marathon.np.index.domain.RowBean;
@@ -26,6 +27,8 @@ public interface IIndexClient
     List<RowBean> findPageData(String type, SearchClause searchClause, int pageSize, int pageIndex, String... indices);
 
     Map<String, Number[]> mulTiAggregation(String type, SearchClause searchClause, GroupBy groupBy, String... indices);
+
+    void batchSave(List<LogData> logDatas);
 
     void save(String index, String type, Map<String, Object> dataMap);
 }

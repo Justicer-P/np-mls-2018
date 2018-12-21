@@ -69,6 +69,12 @@ public class API {
         indexClient.save("log_" + logData.getReqTime().substring(0, 10), logData.getType().toString(), dataMap);
     }
 
+
+    public void batchSave(List<LogData> logDatas) {
+        IndexClient indexClient = new IndexClient();
+        indexClient.batchSave(logDatas);
+    }
+
     public List<RowBean> findPageData(String type, SearchClause searchClause, int pageSize, int pageIndex, String... indices) {
         return getPageRowBeans(type, searchClause, pageSize, pageIndex, indices)._1;
     }

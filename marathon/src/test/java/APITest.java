@@ -5,8 +5,10 @@ import com.sf.marathon.np.index.clause.SearchClause;
 import com.sf.marathon.np.index.client.IndexClient;
 import com.sf.marathon.np.index.domain.EsConfig;
 import com.sf.marathon.np.index.domain.RowBean;
+import org.elasticsearch.common.collect.Lists;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -34,15 +36,35 @@ public class APITest {
     @Test
     public void saveURL() {
         EsConfig.getInstance().setClusterName("elasticsearch");
-        EsConfig.getInstance().setEsUrl("10.202.39.151:9300");
+        EsConfig.getInstance().setEsUrl("10.203.97.8:9300");
 
         LogData logData = new LogData();
-        logData.setReqTime("2018-12-26 14:14");
+        logData.setReqTime("2018-11-29 14:14");
         logData.setUrl(IndexClient.MARATHON + "express" + IndexClient.MARATHON + "pickupservice" + IndexClient.MARATHON + "getTaskDetail");
         logData.setMaxReponseTime(3.51d);
         logData.setMinReponseTime(2.16d);
         logData.setType(GroupType.URL_TYPE);
         new API().save(logData);
+    }
+
+    @Test
+    public void batchSaveUrl() {
+        EsConfig.getInstance().setClusterName("elasticsearch");
+//        EsConfig.getInstance().setEsUrl("10.202.39.151:9300");
+        EsConfig.getInstance().setEsUrl("10.203.97.8:9300");
+        ArrayList<LogData> objects = Lists.newArrayList();
+
+        for (int i = 0; i < 2; i++) {
+            LogData logData = new LogData();
+            logData.setReqTime("2018-12-29 14:14");
+            logData.setUrl(IndexClient.MARATHON + "express" + i + IndexClient.MARATHON + "pickupservice" + IndexClient.MARATHON + "getTaskDetail");
+            logData.setMaxReponseTime(3.51d);
+            logData.setMinReponseTime(2.16d);
+            logData.setType(GroupType.URL_TYPE);
+            objects.add(logData);
+        }
+
+        new API().batchSave(objects);
     }
 
     @Test
@@ -84,7 +106,7 @@ public class APITest {
         EsConfig.getInstance().setClusterName("elasticsearch");
         EsConfig.getInstance().setEsUrl("10.202.39.151:9300");
         API api = new API();
-        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-12-26 14:10", "2018-12-26 15:30");
+        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-12-27 14:10", "2018-12-27 15:30");
         System.out.println("stringMap = " + stringMap);
     }
 
@@ -95,6 +117,18 @@ public class APITest {
         API api = new API();
         String[] strings = {"log_2018-12-26"};
         List<RowBean> pageData = api.findPageData(GroupType.DESTIP.toString(), SearchClause.newClause(), 20, 0, strings);
+        System.out.println("pageData = " + pageData);
+        Date date = new Date(1545372840000L);
+        System.out.println("date = " + date);
+    }
+
+    @Test
+    public void groupByURL() {
+        EsConfig.getInstance().setClusterName("elasticsearch");
+        EsConfig.getInstance().setEsUrl("10.202.39.151:9300");
+        API api = new API();
+        String[] strings = {"log_2018-12-29"};
+        List<RowBean> pageData = api.findPageData(GroupType.URL_TYPE.toString(), SearchClause.newClause(), 20, 0, strings);
         System.out.println("pageData = " + pageData);
         Date date = new Date(1545372840000L);
         System.out.println("date = " + date);

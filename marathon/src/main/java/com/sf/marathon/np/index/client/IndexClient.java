@@ -1,5 +1,6 @@
 package com.sf.marathon.np.index.client;
 
+import com.sf.marathon.np.index.api.domain.LogData;
 import com.sf.marathon.np.index.clause.*;
 import com.sf.marathon.np.index.domain.FieldType;
 import com.sf.marathon.np.index.domain.IndexFieldType;
@@ -15,7 +16,9 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.common.collect.Maps;
-import org.elasticsearch.index.VersionType;
+import org.elasticsearch.common.joda.time.DateTime;
+import org.elasticsearch.common.joda.time.format.DateTimeFormat;
+import org.elasticsearch.common.joda.time.format.DateTimeFormatter;
 import org.elasticsearch.indices.IndexMissingException;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -156,21 +159,62 @@ public class IndexClient implements IIndexClient {
         }
     }
 
-    public void batchSave(String index, String type, List<Map<String, Object>> dataMaps) {
-        BulkRequestBuilder bulkRequest = ElasticClient.instance.getClient().prepareBulk();
-        for (Map<String, Object> dataMap : dataMaps) {
-            bulkRequest.add(ElasticClient.instance.getClient().prepareIndex(index, type)
-                    .setVersionType(VersionType.EXTERNAL).setSource(dataMap
-                    ));
-            if (bulkRequest.numberOfActions() == 1000) {
+    @Override
+    public void batchSave(List<LogData> logDatas) {
+        try {
+            BulkRequestBuilder bulkRequest = ElasticClient.instance.getClient().prepareBulk();
+            for (LogData logData : logDatas) {
+
+                Map<String, Object> dataMap = toDataMap(logData);
+                bulkRequest.add(ElasticClient.instance.getClient().prepareIndex("log_" + logData.getReqTime().substring(0, 10), logData.getType().toString())
+                        .setSource(dataMap
+                        ));
+                if (bulkRequest.numberOfActions() == 1000) {
+                    bulkRequest.execute().actionGet();
+                }
+            }
+            if (bulkRequest.numberOfActions() > 0) {
                 bulkRequest.execute().actionGet();
             }
-        }
-        if (bulkRequest.numberOfActions() > 0) {
-            bulkRequest.execute().actionGet();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (ExceptionUtils.isException(e, IndexMissingException.class)) {
+                IndexAdminClient indexAdminClient = new IndexAdminClient();
+                String index = "log_" + logDatas.get(0).getReqTime().substring(0, 10);
+                indexAdminClient.createDb(index);
+                indexAdminClient.createTable(index, logDatas.get(0).getType().toString(), Lists.newArrayList(FieldType.type("reqTime", IndexFieldType.LONG),
+                        FieldType.type("sourceip"), FieldType.type("destip"), FieldType.type("requestTimes", IndexFieldType.INT)
+                        , FieldType.type("requrl"), FieldType.type("errorTimes", IndexFieldType.INT)
+                        , FieldType.type("minReponseTime", IndexFieldType.DOUBLE),
+                        FieldType.type("minReponseTime", IndexFieldType.DOUBLE),
+                        FieldType.type("avgReponseTime", IndexFieldType.DOUBLE),
+                        FieldType.type("ninePercentResponseTime", IndexFieldType.DOUBLE)
+                ), true);
+                batchSave(logDatas);
+            } else {
+                throw e;
+            }
         }
 
     }
+
+    private Map<String, Object> toDataMap(LogData logData) {
+        Map<String, Object> dataMap = Maps.newHashMap();
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+        String sss = logData.getReqTime();
+        dataMap.put("reqTime", DateTime.parse(sss, format).toDate().getTime());
+        dataMap.put("sourceip", logData.getSourceIp());
+        dataMap.put("destip", logData.getDestIp());
+        dataMap.put("requrl", logData.getUrl());
+        dataMap.put("requestTimes", logData.getRequestTimes());
+        dataMap.put("errorTimes", logData.getErrorTimes());
+        dataMap.put("maxresponsetime", logData.getMaxReponseTime());
+        dataMap.put("minReponseTime", logData.getMinReponseTime());
+        dataMap.put("avgReponseTime", logData.getAvgReponseTime());
+        dataMap.put("ninePercentResponseTime", logData.getNinePercentResponseTime());
+        return dataMap;
+    }
+
     @Override
     public void save(String index, String type, Map<String, Object> dataMap) {
         try {
@@ -179,7 +223,7 @@ public class IndexClient implements IIndexClient {
             if(ExceptionUtils.isException(e, IndexMissingException.class)){
                 IndexAdminClient indexAdminClient = new IndexAdminClient();
                 indexAdminClient.createDb(index);
-                indexAdminClient.createTable(index,type, Lists.newArrayList(FieldType.type("reqTime", IndexFieldType.LONG),
+                indexAdminClient.createTable(index, type, Lists.newArrayList(FieldType.type("reqTime", IndexFieldType.DATE),
                         FieldType.type("sourceip"), FieldType.type("destip"), FieldType.type("requestTimes", IndexFieldType.INT)
                         , FieldType.type("requrl"), FieldType.type("errorTimes", IndexFieldType.INT)
                         , FieldType.type("minReponseTime", IndexFieldType.DOUBLE),
