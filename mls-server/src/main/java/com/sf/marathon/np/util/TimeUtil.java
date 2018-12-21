@@ -1,8 +1,11 @@
 package com.sf.marathon.np.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class TimeUtil {
 
@@ -26,8 +29,40 @@ public class TimeUtil {
 		return cal.getTime();
 	}
 	
+	private static Date convertString2Date(String parttern, String dateString) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat(parttern);
+		return sdf.parse(dateString);
+	}
+	
+	private static String convertDate2String(String parttern, Date dateString) {
+		SimpleDateFormat sdf = new SimpleDateFormat(parttern);
+		return sdf.format(dateString);
+	}
+
+	public static List<String> getIntervalTimeList(String start, String end, int interval) throws ParseException {
+		Date startDate = convertString2Date("yyyy-MM-dd HH:mm", start);
+		Date endDate = convertString2Date("yyyy-MM-dd HH:mm", end);
+		List<String> list = new ArrayList<>();
+		while (startDate.getTime() <= endDate.getTime()) {
+			list.add(convertDate2String("yyyy-MM-dd HH:mm", startDate));
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(startDate);
+			calendar.add(Calendar.MINUTE, interval);
+			if (calendar.getTime().getTime() > endDate.getTime()) {
+				if (!startDate.equals(endDate)) {
+					list.add(convertDate2String("yyyy-MM-dd HH:mm", endDate));
+				}
+				startDate = calendar.getTime();
+			} else {
+				startDate = calendar.getTime();
+			}
+
+		}
+		return list;
+	}
+
 	public static void main(String[] args) {
 		System.out.println(TimeUtil.getDateYYDD());
 	}
-	
+
 }
