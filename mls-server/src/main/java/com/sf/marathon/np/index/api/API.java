@@ -56,12 +56,19 @@ public class API {
         indexClient.save("log_" + logData.getReqTime().substring(0, 10), logData.getType().toString(), dataMap);
     }
 
-    public Map<String, Number[]> mulTiAggregation(String reqTime, GroupType groupType) {
+    public Map<String, Number[]> mulTiAggregation(String reqTime,String startTime,String endTime) {
         GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(MAX, "maxresponsetime"),new AggregationClause(MIN, "minReponseTime"),
                 new AggregationClause(AVG, "ninePercentResponseTime")}
                 , "reqTime", "url");
         IndexClient indexClient = new IndexClient();
-        return indexClient.mulTiAggregation(groupType.toString(), SearchClause.newClause(), groupBy, "log_" + reqTime.substring(0, 10));
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+        long start = DateTime.parse(startTime, format).toDate().getTime();
+        long end = DateTime.parse(endTime, format).toDate().getTime();
+        return indexClient.mulTiAggregation(GroupType.URL_TYPE.toString(), SearchClause.newClause().greaterOrEqual("reqTime",start)
+                .and().lessOrEqual("reqTime",end), groupBy, "log_" + reqTime.substring(0, 10));
     }
 
+    public  Map<String, Number[]> groupByDestIP(String reqTime,String startTime,String endTime){
+        return null;
+    }
 }
