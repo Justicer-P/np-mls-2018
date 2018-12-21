@@ -88,7 +88,7 @@ public class API {
     }
 
     private void checkOverDepth(int pageSize, int pageIndex) {
-        if ((pageIndex+1) * pageSize > PAGING_THRESHOLD) {
+        if ((pageIndex + 1) * pageSize > PAGING_THRESHOLD) {
             throw new ESClientException("Query depth is over " + PAGING_THRESHOLD + ",reject!");
         }
     }
@@ -148,9 +148,8 @@ public class API {
         }
     }
 
-
-    public Map<String, Number[]> mulTiAggregation(String startTime, String endTime) {
-        GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(MAX, "maxresponsetime"),new AggregationClause(MIN, "minReponseTime"),
+    public Map<String, Number[]> mulTiAggregation(String startTime, String endTime, String url) {
+        GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(MAX, "maxresponsetime"), new AggregationClause(MIN, "minReponseTime"),
                 new AggregationClause(AVG, "avgReponseTime"),
                 new AggregationClause(AVG, "ninePercentResponseTime")}
                 , "reqTime", "requrl");
@@ -160,10 +159,17 @@ public class API {
         long end = DateTime.parse(endTime, format).toDate().getTime();
         SearchClause searchClause = SearchClause.newClause().greaterOrEqual("reqTime", start)
                 .and().lessOrEqual("reqTime", end);
+        if (!StringUtil.isEmpty(url)) {
+            searchClause.and().equal("requrl", url);
+        }
         return indexClient.mulTiAggregation(GroupType.URL_TYPE.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
     }
 
-    public Map<String, Number[]> sumRequestGroupByURL(String startTime, String endTime) {
+    public Map<String, Number[]> mulTiAggregation(String startTime, String endTime) {
+        return mulTiAggregation(startTime, endTime, null);
+    }
+
+    public Map<String, Number[]> sumRequestGroupByURL(String startTime, String endTime, String url) {
         GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(SUM, "requestTimes"), new AggregationClause(SUM, "errorTimes")}
                 , "reqTime", "requrl");
         IndexClient indexClient = new IndexClient();
@@ -172,10 +178,21 @@ public class API {
         long end = DateTime.parse(endTime, format).toDate().getTime();
         SearchClause searchClause = SearchClause.newClause().greaterOrEqual("reqTime", start)
                 .and().lessOrEqual("reqTime", end);
+        if (!StringUtil.isEmpty(url)) {
+            searchClause.and().equal("requrl", url);
+        }
         return indexClient.mulTiAggregation(GroupType.URL_TYPE.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
     }
 
+    public Map<String, Number[]> sumRequestGroupByURL(String startTime, String endTime) {
+        return sumRequestGroupByURL(startTime, endTime, null);
+    }
+
     public Map<String, Number[]> groupBySourceIP(String startTime, String endTime) {
+        return groupBySourceIP(startTime, endTime, null);
+    }
+
+    public Map<String, Number[]> groupBySourceIP(String startTime, String endTime, String sourceIp) {
         GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(SUM, "requestTimes"), new AggregationClause(SUM, "errorTimes")}
                 , "reqTime", "sourceip");
         IndexClient indexClient = new IndexClient();
@@ -184,10 +201,13 @@ public class API {
         long end = DateTime.parse(endTime, format).toDate().getTime();
         SearchClause searchClause = SearchClause.newClause().greaterOrEqual("reqTime", start)
                 .and().lessOrEqual("reqTime", end);
+        if (!StringUtil.isEmpty(sourceIp)) {
+            searchClause.equal("sourceip", sourceIp);
+        }
         return indexClient.mulTiAggregation(GroupType.SOURCEIP.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
     }
 
-    public Map<String, Number[]> groupByDestIP(String startTime, String endTime) {
+    public Map<String, Number[]> groupByDestIP(String startTime, String endTime, String destIp) {
         GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(SUM, "requestTimes"), new AggregationClause(SUM, "errorTimes")}
                 , "reqTime", "destip");
         IndexClient indexClient = new IndexClient();
@@ -196,6 +216,13 @@ public class API {
         long end = DateTime.parse(endTime, format).toDate().getTime();
         SearchClause searchClause = SearchClause.newClause().greaterOrEqual("reqTime", start)
                 .and().lessOrEqual("reqTime", end);
+        if (!StringUtil.isEmpty(destIp)) {
+            searchClause.equal("destip", destIp);
+        }
         return indexClient.mulTiAggregation(GroupType.DESTIP.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
+    }
+
+    public Map<String, Number[]> groupByDestIP(String startTime, String endTime) {
+        return groupByDestIP(startTime, endTime, null);
     }
 }

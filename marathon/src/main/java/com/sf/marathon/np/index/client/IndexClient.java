@@ -9,11 +9,13 @@ import com.sf.marathon.np.index.exception.ESClientException;
 import com.sf.marathon.np.index.util.ExceptionUtils;
 import com.sf.marathon.np.index.util.StringUtil;
 import com.sf.marathon.np.index.util.Tuple;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.common.collect.Maps;
+import org.elasticsearch.index.VersionType;
 import org.elasticsearch.indices.IndexMissingException;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -154,6 +156,21 @@ public class IndexClient implements IIndexClient {
         }
     }
 
+    public void batchSave(String index, String type, List<Map<String, Object>> dataMaps) {
+        BulkRequestBuilder bulkRequest = ElasticClient.instance.getClient().prepareBulk();
+        for (Map<String, Object> dataMap : dataMaps) {
+            bulkRequest.add(ElasticClient.instance.getClient().prepareIndex(index, type)
+                    .setVersionType(VersionType.EXTERNAL).setSource(dataMap
+                    ));
+            if (bulkRequest.numberOfActions() == 1000) {
+                bulkRequest.execute().actionGet();
+            }
+        }
+        if (bulkRequest.numberOfActions() > 0) {
+            bulkRequest.execute().actionGet();
+        }
+
+    }
     @Override
     public void save(String index, String type, Map<String, Object> dataMap) {
         try {
