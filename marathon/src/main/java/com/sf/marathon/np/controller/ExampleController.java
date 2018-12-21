@@ -15,7 +15,6 @@ import com.sf.marathon.np.domain.ExampleDomain;
 import com.sf.marathon.np.index.api.API;
 import com.sf.marathon.np.service.IExampleService;
 import com.sf.marathon.np.util.JacksonUtil;
-import com.sf.marathon.np.util.TimeUtil;
 
 @RequestMapping("/example")
 @Controller
@@ -32,7 +31,7 @@ public class ExampleController extends BaseController {
 	public RestResponse<String> example1() {
 		String s = "2018-12-21 12:00";
 		String e = "2018-12-21 13:00";
-		System.out.println(api.mulTiAggregation(TimeUtil.getDateymd(), s, e));
+		System.out.println(api.mulTiAggregation(s, e));
 		return handle(r -> r.setResult(exampleService.sayHello()));
 	}
 
