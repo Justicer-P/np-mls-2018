@@ -1,6 +1,7 @@
 package com.sf.marathon.np.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -109,6 +110,20 @@ public class IpMonitorService implements IIpMonitorService {
 	public IpMonitorResp realTimeMonitor(IpMonitorReq req) {
 		// TODO
 		IpMonitorResp resp = new IpMonitorResp();
+		return resp;
+	}
+
+	@Override
+	public IpMonitorResp realTimeMonitorWithAllIps(IpMonitorReq req) {
+		IpMonitorResp resp = new IpMonitorResp();
+		Map<String, Number[]> result = new HashMap<>();
+		result.putAll(api.groupBySourceIP(req.getBeginTime(), req.getEndTime()));
+		result.putAll(api.groupByDestIP(req.getBeginTime(), req.getEndTime()));
+		final double[] count = new double[] {};
+		result.forEach((k, v) -> {
+			count[0] += v[0].doubleValue();
+		});
+		resp.setRealTimeCount(String.valueOf(count));
 		return resp;
 	}
 
