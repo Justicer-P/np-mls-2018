@@ -12,4 +12,6 @@ public interface IIpMonitorService {
 	
 	public IpMonitorResp realTimeMonitor(IpMonitorReq req);
 
+	public IpMonitorResp realTimeMonitorWithAllIps(IpMonitorReq req);
+
 }
