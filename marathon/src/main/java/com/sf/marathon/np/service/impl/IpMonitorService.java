@@ -59,6 +59,9 @@ public class IpMonitorService implements IIpMonitorService {
 		default:
 			throw new RuntimeException("unsupported type string!");
 		}
+		resp.setxAxis(xAxis);
+		resp.setIpRequestCount(ipRequestCount);
+		resp.setIpFailCount(ipFailCount);
 		return resp;
 	}
 
@@ -123,7 +126,7 @@ public class IpMonitorService implements IIpMonitorService {
 		result.forEach((k, v) -> {
 			count[0] += v[0].doubleValue();
 		});
-		resp.setRealTimeCount(String.valueOf(count));
+		resp.setRealTimeCount(String.valueOf(count[0]));
 		return resp;
 	}
 

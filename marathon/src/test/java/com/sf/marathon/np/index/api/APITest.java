@@ -82,7 +82,7 @@ public class APITest {
             LogData logData = new LogData();
             logData.setReqTime("2018-11-21 15:14");
 //            logData.setUrl(IndexClient.MARATHON + "express" + i + IndexClient.MARATHON + "pickupservice" + IndexClient.MARATHON + "getTaskDetail");
-            logData.setUrl("/express/deliveryservice");
+            logData.setUrl("/express/pickup");
             logData.setRequestTimes(30 + i);
             logData.setErrorTimes(10 + i);
             logData.setType(GroupType.URL_TIME);
@@ -199,7 +199,7 @@ public class APITest {
 
     @Test
     public void groupByDestIP1ByFilter() {
-        Map<String, Number[]> stringMap = api.groupByDestIP("2018-11-21 00:10", "2018-11-22 16:30", "10.202.108.15");
+        Map<String, Number[]> stringMap = api.groupByDestIP("2018-11-21 00:10", "2018-11-22 16:30");
         for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
             System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
         }
