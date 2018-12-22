@@ -65,7 +65,7 @@ public class API {
         dataMap.put("avgResponseTime", logData.getAvgReponseTime());
         dataMap.put("ninePercentResponseTime", logData.getNinePercentResponseTime());
         dataMap.put("__index_tm__", new Date());
-        indexClient.save("log_" + logData.getReqTime().substring(0, 10), logData.getType().toString(), dataMap);
+        indexClient.save(IndexClient.getDBName("log_" + logData.getReqTime().substring(0, 10), logData.getType().toString()), logData.getType().toString(), dataMap);
     }
 
 
@@ -165,7 +165,7 @@ public class API {
         if (!StringUtil.isEmpty(url)) {
             searchClause.and().equal("requrl", url);
         }
-        return indexClient.mulTiAggregation(GroupType.URL_TYPE.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
+        return indexClient.mulTiAggregation(GroupType.URL_TYPE.toString(), searchClause, groupBy, IndexClient.getDBName("log_" + startTime.substring(0, 10), GroupType.URL_TYPE.toString()));
     }
 
     public Map<String, Number[]> mulTiAggregation(String startTime, String endTime) {
@@ -183,7 +183,7 @@ public class API {
         if (!StringUtil.isEmpty(url)) {
             searchClause.and().equal("requrl", url);
         }
-        return indexClient.mulTiAggregation(GroupType.URL_TIME.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
+        return indexClient.mulTiAggregation(GroupType.URL_TIME.toString(), searchClause, groupBy, IndexClient.getDBName("log_" + startTime.substring(0, 10), GroupType.URL_TIME.toString()));
     }
 
     public Map<String, Number[]> sumRequestGroupByURL(String startTime, String endTime) {
@@ -206,7 +206,7 @@ public class API {
         if (!StringUtil.isEmpty(sourceIp)) {
             searchClause.and().equal("sourceip", sourceIp);
         }
-        return indexClient.mulTiAggregation(GroupType.SOURCEIP.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
+        return indexClient.mulTiAggregation(GroupType.SOURCEIP.toString(), searchClause, groupBy, IndexClient.getDBName("log_" + startTime.substring(0, 10), GroupType.SOURCEIP.toString()));
     }
 
     public Map<String, Number[]> groupByDestIP(String startTime, String endTime, String destIp) {
@@ -221,7 +221,7 @@ public class API {
         if (!StringUtil.isEmpty(destIp)) {
             searchClause.and().equal("destip", destIp);
         }
-        return indexClient.mulTiAggregation(GroupType.DESTIP.toString(), searchClause, groupBy, "log_" + startTime.substring(0, 10));
+        return indexClient.mulTiAggregation(GroupType.DESTIP.toString(), searchClause, groupBy, IndexClient.getDBName("log_" + startTime.substring(0, 10), GroupType.DESTIP.toString()));
     }
 
     public Map<String, Number[]> groupByDestIP(String startTime, String endTime) {

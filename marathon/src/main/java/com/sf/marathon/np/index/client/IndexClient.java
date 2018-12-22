@@ -160,8 +160,12 @@ public class IndexClient implements IIndexClient {
         }
     }
 
+    public static String getDBName(String index, String type) {
+        return index + "~" + type.toLowerCase();
+    }
+
     private ArrayList<FieldType> getFieldTypes() {
-        return Lists.newArrayList(FieldType.type("reqTime", IndexFieldType.DATE),
+        return Lists.newArrayList(FieldType.type("reqTime", IndexFieldType.LONG),//destip
                 FieldType.type("sourceip"), FieldType.type("destip"), FieldType.type("requestTimes", IndexFieldType.INT)
                 , FieldType.type("requrl"), FieldType.type("errorTimes", IndexFieldType.INT)
                 , FieldType.type("maxResponseTime", IndexFieldType.DOUBLE),
@@ -177,7 +181,7 @@ public class IndexClient implements IIndexClient {
         for (LogData logData : logDatas) {
 
             Map<String, Object> dataMap = toDataMap(logData);
-            bulkRequest.add(ElasticClient.instance.getClient().prepareIndex("log_" + logData.getReqTime().substring(0, 10), logData.getType().toString())
+            bulkRequest.add(ElasticClient.instance.getClient().prepareIndex(getDBName("log_" + logData.getReqTime().substring(0, 10), logData.getType().toString()), logData.getType().toString())
                     .setSource(dataMap
                     ));
             if (bulkRequest.numberOfActions() == 1000) {
@@ -195,11 +199,14 @@ public class IndexClient implements IIndexClient {
     private void dealOnError(List<LogData> logDatas, BulkResponse bulkItemResponses) {
         if (bulkItemResponses.hasFailures()) {
             String s = bulkItemResponses.buildFailureMessage();
+            System.out.println("s = " + s);
             if (!StringUtil.isEmpty(s) && s.contains("IndexMissingException")) {
                 IndexAdminClient indexAdminClient = new IndexAdminClient();
                 String index = "log_" + logDatas.get(0).getReqTime().substring(0, 10);
-                indexAdminClient.createDb(index);
-                indexAdminClient.createTable(index, logDatas.get(0).getType().toString(), getFieldTypes(), true);
+                String type = logDatas.get(0).getType().toString();
+                String dbName = getDBName(index, type);
+                indexAdminClient.createDb(dbName);
+                indexAdminClient.createTable(dbName, type, getFieldTypes(), true);
 
                 batchSave(logDatas);
             }
@@ -230,7 +237,7 @@ public class IndexClient implements IIndexClient {
         } catch (Exception e) {
             if (ExceptionUtils.isException(e, IndexMissingException.class)) {
                 IndexAdminClient indexAdminClient = new IndexAdminClient();
-                indexAdminClient.createDb(index);
+                indexAdminClient.createDb(getDBName(index, type));
                 indexAdminClient.createTable(index, type, getFieldTypes(), true);
                 save(index, type, dataMap);
             } else {
