@@ -3,7 +3,6 @@ package com.sf.marathon.np.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,7 +28,7 @@ public class IpMonitorController extends BaseController{
 	
 	@PostMapping("/firstSourceIpMonitor")
 	@ResponseBody
-	public RestResponse<IpMonitorResp> firstSourceIpMonitor(@RequestBody IpMonitorReq req) {
+	public RestResponse<IpMonitorResp> firstSourceIpMonitor(IpMonitorReq req) {
 		return handle(r -> {
 			try {
 				r.setResult(ipMonitorService.ipMonitor(IpType.SOURCE_IP, req, true));
@@ -41,7 +40,7 @@ public class IpMonitorController extends BaseController{
 	
 	@PostMapping("/sourceIpMonitor")
 	@ResponseBody
-	public RestResponse<IpMonitorResp> sourceIpMonitor(@RequestBody IpMonitorReq req) {
+	public RestResponse<IpMonitorResp> sourceIpMonitor(IpMonitorReq req) {
 		return handle(r -> {
 			try {
 				r.setResult(ipMonitorService.ipMonitor(IpType.SOURCE_IP, req, false));
@@ -53,7 +52,7 @@ public class IpMonitorController extends BaseController{
 	
 	@PostMapping("/firstDestIpMonitor")
 	@ResponseBody
-	public RestResponse<IpMonitorResp> firstDestIpMonitor(@RequestBody IpMonitorReq req) {
+	public RestResponse<IpMonitorResp> firstDestIpMonitor(IpMonitorReq req) {
 		return handle(r -> {
 			try {
 				r.setResult(ipMonitorService.ipMonitor(IpType.DEST_IP, req, true));
@@ -65,7 +64,7 @@ public class IpMonitorController extends BaseController{
 	
 	@PostMapping("/destIpMonitor")
 	@ResponseBody
-	public RestResponse<IpMonitorResp> destIpMonitor(@RequestBody IpMonitorReq req) {
+	public RestResponse<IpMonitorResp> destIpMonitor(IpMonitorReq req) {
 		return handle(r -> {
 			try {
 				r.setResult(ipMonitorService.ipMonitor(IpType.DEST_IP, req, false));
@@ -77,13 +76,13 @@ public class IpMonitorController extends BaseController{
 	
 	@PostMapping("/realTimeMonitor")
 	@ResponseBody
-	public RestResponse<IpMonitorResp> realTimeMonitor(@RequestBody IpMonitorReq req) {
+	public RestResponse<IpMonitorResp> realTimeMonitor(IpMonitorReq req) {
 		return handle(r -> r.setResult(ipMonitorService.realTimeMonitor(req)));
 	}
 	
 	@PostMapping("/realTimeMonitorWithAllIps")
 	@ResponseBody
-	public RestResponse<IpMonitorResp> realTimeMonitorWithAllIps(@RequestBody IpMonitorReq req) {
+	public RestResponse<IpMonitorResp> realTimeMonitorWithAllIps(IpMonitorReq req) {
 		return handle(r -> r.setResult(ipMonitorService.realTimeMonitorWithAllIps(req)));
 	}
 	
