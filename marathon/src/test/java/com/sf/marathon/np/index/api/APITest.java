@@ -147,7 +147,7 @@ public class APITest {
 
         for (int i = 0; i < 10; i++) {
             LogData logData = new LogData();
-            logData.setReqTime("2018-12-22 14:1" + i);
+            logData.setReqTime("2018-11-21 14:1" + i);
 //        logData.setUrl(IndexClient.MARATHON+"express"+IndexClient.MARATHON+"pickupservice"+IndexClient.MARATHON+"getTaskDetail");
             logData.setDestIp("10.202.108.1" + i);
             logData.setRequestTimes(20);
@@ -170,38 +170,54 @@ public class APITest {
         System.out.println("date = " + date);
     }
 
+//    @Test
+//    public void groupByURL() {
+//        String[] strings = {"log_2018-12-29"};
+//        List<RowBean> pageData = api.findPageData(GroupType.URL_TYPE.toString(), SearchClause.newClause(), 20, 0, strings);
+//        System.out.println("pageData = " + pageData);
+//        Date date = new Date(1545372840000L);
+//        System.out.println("date = " + date);
+//    }
+//
+//    @Test
+//    public void groupByDestIP1() {
+//        long starTm = System.currentTimeMillis();
+//
+//        System.out.println("(System.currentTimeMillis()-starTm) = " + (System.currentTimeMillis() - starTm));
+//
+//        starTm = System.currentTimeMillis();
+//        for (int i = 0; i < 10; i++) {
+//            Map<String, Number[]> stringMap = api.groupByDestIP("2018-12-21 14:10", "2018-12-21 15:30");
+//            for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
+//                System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
+//            }
+//        }
+//        System.out.println("(System.currentTimeMillis()-starTm) = " + (System.currentTimeMillis() - starTm));
+//
+//    }
+
+
     @Test
-    public void groupByURL() {
-        String[] strings = {"log_2018-12-29"};
-        List<RowBean> pageData = api.findPageData(GroupType.URL_TYPE.toString(), SearchClause.newClause(), 20, 0, strings);
-        System.out.println("pageData = " + pageData);
-        Date date = new Date(1545372840000L);
-        System.out.println("date = " + date);
+    public void groupByDestIP1ByFilter() {
+        Map<String, Number[]> stringMap = api.groupByDestIP("2018-11-21 00:10", "2018-11-22 16:30", "10.202.108.15");
+        for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
+            System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
+        }
     }
 
     @Test
-    public void groupByDestIP1() {
+    public void groupByDestIPNoFilter() {
         long starTm = System.currentTimeMillis();
 
         System.out.println("(System.currentTimeMillis()-starTm) = " + (System.currentTimeMillis() - starTm));
 
         starTm = System.currentTimeMillis();
         for (int i = 0; i < 10; i++) {
-            Map<String, Number[]> stringMap = api.groupByDestIP("2018-12-21 14:10", "2018-12-21 15:30");
+            Map<String, Number[]> stringMap = api.groupByDestIP("2018-11-21 00:10", "2018-11-22 16:30");
             for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
                 System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
             }
         }
         System.out.println("(System.currentTimeMillis()-starTm) = " + (System.currentTimeMillis() - starTm));
-
-    }
-
-
-    @Test
-    public void groupByDestIP1ByFilter() {
-        Map<String, Number[]> stringMap = api.groupByDestIP("2018-12-21 14:10", "2018-12-21 15:30", "10.202.108.15");
-        for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
-            System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
-        }
     }
 }
