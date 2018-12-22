@@ -7,6 +7,9 @@ public class UrlMonitorResp implements Serializable{
 
 	private static final long serialVersionUID = -3659004224350009870L;
 	
+	// Url
+	private String url;
+	
 	// Urls
 	private List<String> urls;
 	
@@ -30,6 +33,14 @@ public class UrlMonitorResp implements Serializable{
 	
 	// 90%响应时间
 	private List<String> ninetyPercentRespTime;
+
+	public List<String> getUrls() {
+		return urls;
+	}
+
+	public void setUrls(List<String> urls) {
+		this.urls = urls;
+	}
 
 	public List<String> getUrlRequestCount() {
 		return urlRequestCount;
@@ -55,12 +66,12 @@ public class UrlMonitorResp implements Serializable{
 		this.xAxis = xAxis;
 	}
 
-	public List<String> getUrls() {
-		return urls;
+	public String getUrl() {
+		return url;
 	}
 
-	public void setUrls(List<String> urls) {
-		this.urls = urls;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public List<String> getLongestRespTime() {

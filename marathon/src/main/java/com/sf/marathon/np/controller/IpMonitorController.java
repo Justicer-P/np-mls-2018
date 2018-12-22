@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sf.marathon.np.common.IpType;
 import com.sf.marathon.np.controller.vo.req.IpMonitorReq;
 import com.sf.marathon.np.controller.vo.resp.AllIpsResp;
 import com.sf.marathon.np.controller.vo.resp.IpMonitorResp;
@@ -26,12 +27,36 @@ public class IpMonitorController extends BaseController{
 		return handle(r -> r.setResult(ipMonitorService.getAllIps()));
 	}
 	
+	@PostMapping("/firstSourceIpMonitor")
+	@ResponseBody
+	public RestResponse<IpMonitorResp> firstSourceIpMonitor(@RequestBody IpMonitorReq req) {
+		return handle(r -> {
+			try {
+				r.setResult(ipMonitorService.ipMonitor(IpType.SOURCE_IP, req, true));
+			} catch (Exception e) {
+				r.setMsg(e.getMessage());
+			}
+		});
+	}
+	
 	@PostMapping("/sourceIpMonitor")
 	@ResponseBody
 	public RestResponse<IpMonitorResp> sourceIpMonitor(@RequestBody IpMonitorReq req) {
 		return handle(r -> {
 			try {
-				r.setResult(ipMonitorService.sourceIpMonitor(req));
+				r.setResult(ipMonitorService.ipMonitor(IpType.SOURCE_IP, req, false));
+			} catch (Exception e) {
+				r.setMsg(e.getMessage());
+			}
+		});
+	}
+	
+	@PostMapping("/firstDestIpMonitor")
+	@ResponseBody
+	public RestResponse<IpMonitorResp> firstDestIpMonitor(@RequestBody IpMonitorReq req) {
+		return handle(r -> {
+			try {
+				r.setResult(ipMonitorService.ipMonitor(IpType.DEST_IP, req, true));
 			} catch (Exception e) {
 				r.setMsg(e.getMessage());
 			}
@@ -43,7 +68,7 @@ public class IpMonitorController extends BaseController{
 	public RestResponse<IpMonitorResp> destIpMonitor(@RequestBody IpMonitorReq req) {
 		return handle(r -> {
 			try {
-				r.setResult(ipMonitorService.destIpMonitor(req));
+				r.setResult(ipMonitorService.ipMonitor(IpType.DEST_IP, req, false));
 			} catch (Exception e) {
 				r.setMsg(e.getMessage());
 			}

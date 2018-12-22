@@ -6,6 +6,9 @@ public class IpMonitorReq implements Serializable{
 
 	private static final long serialVersionUID = 2991826418912813806L;
 	
+	// ip
+	private String ip;
+	
 	// 开始时间
 	private String beginTime;
 	
@@ -23,6 +26,14 @@ public class IpMonitorReq implements Serializable{
 	
 	// 实时请求时间
 	private String realTimeReqTime;
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 
 	public String getRealTimeReqTime() {
 		return realTimeReqTime;
