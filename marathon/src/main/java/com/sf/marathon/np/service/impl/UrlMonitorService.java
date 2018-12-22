@@ -61,7 +61,7 @@ public class UrlMonitorService implements IUrlMonitorService {
 				resp.setUrl(url[0]);
 				resp.setUrls(new ArrayList<>(urls));
 			} else {
-				result = api.mulTiAggregation(req.getBeginTime(), req.getEndTime(), req.getUrl());
+				result = api.sumRequestGroupByURL(req.getBeginTime(), req.getEndTime(), req.getUrl());
 				Map<String, Number[]> sortedMap = new TreeMap<>((m1, m2) -> {
 					return m1.substring(0, m1.indexOf("~")).compareTo(m2.substring(0, m2.indexOf("~")));
 				});
@@ -104,7 +104,7 @@ public class UrlMonitorService implements IUrlMonitorService {
 				resp.setUrl(url[0]);
 				resp.setUrls(new ArrayList<>(urls));
 			} else {
-				result = api.sumRequestGroupByURL(req.getBeginTime(), req.getEndTime(), req.getUrl());
+				result = api.mulTiAggregation(req.getBeginTime(), req.getEndTime(), req.getUrl());
 				Map<String, Number[]> sortedMap = new TreeMap<>((m1, m2) -> {
 					return m1.substring(0, m1.indexOf("~")).compareTo(m2.substring(0, m2.indexOf("~")));
 				});
