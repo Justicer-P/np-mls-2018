@@ -197,7 +197,6 @@ public class API {
     public Map<String, Number[]> groupBySourceIP(String startTime, String endTime, String sourceIp) {
         GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(SUM, "requestTimes"), new AggregationClause(SUM, "errorTimes")}
                 , "reqTime", "sourceip");
-        IndexClient indexClient = new IndexClient();
         DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
         long start = DateTime.parse(startTime, format).toDate().getTime();
         long end = DateTime.parse(endTime, format).toDate().getTime();
@@ -212,7 +211,6 @@ public class API {
     public Map<String, Number[]> groupByDestIP(String startTime, String endTime, String destIp) {
         GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(SUM, "requestTimes"), new AggregationClause(SUM, "errorTimes")}
                 , "reqTime", "destip");
-        IndexClient indexClient = new IndexClient();
         DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
         long start = DateTime.parse(startTime, format).toDate().getTime();
         long end = DateTime.parse(endTime, format).toDate().getTime();

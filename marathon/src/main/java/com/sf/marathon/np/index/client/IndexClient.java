@@ -27,6 +27,8 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.NumericMetricsAggregation;
 import org.elasticsearch.search.sort.GeoDistanceSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -49,6 +51,8 @@ import java.util.Map;
  */
 @Component
 public class IndexClient implements IIndexClient {
+    private static Logger logger = LoggerFactory.getLogger(IndexClient.class);
+
     private static final String GROUP_KEY_SPLITTER = "~";
     public static final int DEFAULT_PARTITION = 5;
     public static final int PAGING_THRESHOLD = 50000;
@@ -198,9 +202,9 @@ public class IndexClient implements IIndexClient {
 
     private void dealOnError(List<LogData> logDatas, BulkResponse bulkItemResponses) {
         if (bulkItemResponses.hasFailures()) {
-            String s = bulkItemResponses.buildFailureMessage();
-            System.out.println("s = " + s);
-            if (!StringUtil.isEmpty(s) && s.contains("IndexMissingException")) {
+            String errorMsgs = bulkItemResponses.buildFailureMessage();
+            logger.error("batch save error:{}", errorMsgs);
+            if (!StringUtil.isEmpty(errorMsgs) && errorMsgs.contains("IndexMissingException")) {
                 IndexAdminClient indexAdminClient = new IndexAdminClient();
                 String index = "log_" + logDatas.get(0).getReqTime().substring(0, 10);
                 String type = logDatas.get(0).getType().toString();

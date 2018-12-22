@@ -2,7 +2,6 @@ package com.sf.marathon.np.index.api;
 
 import com.sf.marathon.np.index.api.domain.LogData;
 import com.sf.marathon.np.index.clause.SearchClause;
-import com.sf.marathon.np.index.domain.EsConfig;
 import com.sf.marathon.np.index.domain.RowBean;
 import org.elasticsearch.common.collect.Lists;
 import org.junit.Test;
@@ -20,16 +19,6 @@ public class APITest {
 
     @Autowired
     private API api;
-
-    @Test
-    public void mulTiAggregation() {
-
-        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-12-22 00:10", "2018-12-23 00:10");
-        System.out.println("stringMap = " + stringMap);
-        for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
-            System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
-        }
-    }
 
     @Test
     public void saveURL() throws UnsupportedEncodingException {
@@ -51,7 +40,7 @@ public class APITest {
 
         for (int i = 0; i < 3; i++) {
             LogData logData = new LogData();
-            logData.setReqTime("2018-12-13 14:14");
+            logData.setReqTime("2018-10-13 14:14");
 //            logData.setUrl(IndexClient.MARATHON + "express" + i + IndexClient.MARATHON + "pickupservice" + IndexClient.MARATHON + "getTaskDetail");
             logData.setUrl("/express/pickservice");
             logData.setMaxReponseTime(4.51d);
@@ -64,6 +53,26 @@ public class APITest {
 
         api.batchSave(objects);
     }
+
+    @Test
+    public void mulTiAggregationByUrl() {
+
+        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-10-13 14:10", "2018-10-13 15:30");
+        System.out.println("stringMap = " + stringMap);
+        for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
+            System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
+        }
+    }
+
+    @Test
+    public void mulTiAggregation() {
+        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-10-13 14:10", "2018-10-13 15:30");
+        System.out.println("stringMap = " + stringMap);
+        for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
+            System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
+        }
+    }
+
 
     @Test
     public void batchSaveTimeUrl() {
@@ -121,20 +130,8 @@ public class APITest {
     }
 
     @Test
-    public void mulTiAggregationByUrl() {
-
-        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-12-22 14:10", "2018-12-22 15:30");
-        System.out.println("stringMap = " + stringMap);
-        for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
-            System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
-        }
-    }
-
-
-    @Test
     public void groupByDestIP() {
-        EsConfig.getInstance().setClusterName("elasticsearch");
-        EsConfig.getInstance().setEsUrl("10.202.39.151:9300");
+
         String[] strings = {"log_2018-12-26"};
         List<RowBean> pageData = api.findPageData(GroupType.DESTIP.toString(), SearchClause.newClause(), 20, 0, strings);
         System.out.println("pageData = " + pageData);
