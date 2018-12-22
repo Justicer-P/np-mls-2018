@@ -122,6 +122,10 @@ public class IpMonitorService implements IIpMonitorService {
 		Map<String, Number[]> result = new HashMap<>();
 		result.putAll(api.groupBySourceIP(req.getBeginTime(), req.getEndTime()));
 		result.putAll(api.groupByDestIP(req.getBeginTime(), req.getEndTime()));
+		if (result.size() == 0) {
+			resp.setRealTimeCount("0");
+			return resp;
+		}
 		final double[] count = new double[] {};
 		result.forEach((k, v) -> {
 			count[0] += v[0].doubleValue();
