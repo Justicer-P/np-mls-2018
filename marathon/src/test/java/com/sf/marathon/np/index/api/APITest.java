@@ -2,8 +2,12 @@ package com.sf.marathon.np.index.api;
 
 import com.sf.marathon.np.index.api.domain.LogData;
 import com.sf.marathon.np.index.clause.SearchClause;
+import com.sf.marathon.np.index.client.IndexClient;
 import com.sf.marathon.np.index.domain.RowBean;
 import org.elasticsearch.common.collect.Lists;
+import org.elasticsearch.common.joda.time.DateTime;
+import org.elasticsearch.common.joda.time.format.DateTimeFormat;
+import org.elasticsearch.common.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +70,7 @@ public class APITest {
 
     @Test
     public void mulTiAggregation() {
-        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-11-21 00:10", "2018-11-22 15:30");
+        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-12-22 00:10", "2018-12-23 15:30");
         System.out.println("stringMap = " + stringMap);
         for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
             System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
@@ -80,7 +84,7 @@ public class APITest {
 
         for (int i = 0; i < 3; i++) {
             LogData logData = new LogData();
-            logData.setReqTime("2018-11-21 15:14");
+            logData.setReqTime("2018-12-22 15:14");
 //            logData.setUrl(IndexClient.MARATHON + "express" + i + IndexClient.MARATHON + "pickupservice" + IndexClient.MARATHON + "getTaskDetail");
             logData.setUrl("/express/pickup");
             logData.setRequestTimes(30 + i);
@@ -94,10 +98,11 @@ public class APITest {
 
     @Test
     public void sumRequestGroupByURL() {
-        Map<String, Number[]> stringMap = api.sumRequestGroupByURL("2018-11-21 00:10", "2018-11-22 15:30", "/express/deliveryservice");
+        Map<String, Number[]> stringMap = api.sumRequestGroupByURL("2018-12-22 00:10", "2018-12-23 15:30");
         for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
             System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
         }
+        System.out.println("stringMap.size() = " + stringMap.size());
     }
 
     @Test
@@ -109,26 +114,43 @@ public class APITest {
     }
 
     @Test
+    public void testTime() {
+        String s = new DateTime().toString("yyyy-MM-dd HH:mm");
+        System.out.println("s = " + s);
+
+
+        Date date = new Date(1545445020000L);
+        System.out.println("date = " + date);
+    }
+    @Test
     public void BATCHsaveSourceIP() {
+//        while (true) {
         ArrayList<LogData> objects = Lists.newArrayList();
 
         for (int i = 0; i < 10; i++) {
             LogData logData = new LogData();
-            logData.setReqTime("2018-11-21 14:1" + i);
+//                logData.setReqTime(new DateTime().toString("yyyy-MM-dd HH:mm"));
+            logData.setReqTime("2018-11-22 14:1" + i);
 //        logData.setUrl(IndexClient.MARATHON+"express"+IndexClient.MARATHON+"pickupservice"+IndexClient.MARATHON+"getTaskDetail");
             logData.setSourceIp("10.202.106.1" + i);
-            logData.setRequestTimes(20);
-            logData.setErrorTimes(5);
+            logData.setRequestTimes(new Random().nextInt(20));
+            logData.setErrorTimes(new Random().nextInt(10));
             logData.setType(GroupType.SOURCEIP);
             objects.add(logData);
         }
-        api.batchSave(objects);
 
+        api.batchSave(objects);
+//            try {
+//                TimeUnit.MINUTES.sleep(1);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     @Test
     public void groupBySourceIP() {
-        Map<String, Number[]> stringMap = api.groupBySourceIP("2018-11-21 00:10", "2018-11-22 15:30");
+        Map<String, Number[]> stringMap = api.groupBySourceIP("2018-12-22 00:00", "2018-12-23 00:00");
         for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
             System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
         }
@@ -136,7 +158,8 @@ public class APITest {
 
     @Test
     public void groupBySourceIPFilterByIP() {
-        Map<String, Number[]> stringMap = api.groupBySourceIP("2018-11-21 00:10", "2018-11-22 15:30", "10.202.106.19");
+        Map<String, Number[]> stringMap = api.groupBySourceIP("2018-12-22 13:42", "2018-12-22 14:43");
+//        Map<String, Number[]> stringMap = api.groupBySourceIP("2018-11-22 14:10", "2018-11-22 15:30");
         for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
             System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
         }
@@ -162,12 +185,23 @@ public class APITest {
 
     @Test
     public void groupByDestIP() {
+//asdasd
 
-        String[] strings = {"log_2018-12-26"};
-        List<RowBean> pageData = api.findPageData(GroupType.DESTIP.toString(), SearchClause.newClause(), 20, 0, strings);
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+        long start = DateTime.parse("2018-12-22 10:12", format).toDate().getTime();
+        long end = DateTime.parse("2018-12-23 15:15", format).toDate().getTime();
+        SearchClause searchClause = SearchClause.newClause().greaterOrEqual("reqTime", start)
+                .and().lessOrEqual("reqTime", end);
+//        List<RowBean> pageData = api.findPageData(GroupType.SOURCEIP.toString(), SearchClause.newClause().orderBy(new OrderClause("reqTime", Order.DESC)), 1, 0, IndexClient.getDBName("log_2018-12-22",GroupType.SOURCEIP.toString()));
+        List<RowBean> pageData = api.findPageData(GroupType.URL_TIME.toString(), searchClause.and().equal("requrl", "/dzoop"), 100, 0, IndexClient.getDBName("log_2018-12-22", GroupType.URL_TIME.toString()));
         System.out.println("pageData = " + pageData);
-        Date date = new Date(1545372840000L);
+        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-12-22 10:12", "2018-12-23 15:15", "/dzoop");
+        for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
+            System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
+        }
+        Date date = new Date(1545459180000L);
         System.out.println("date = " + date);
+
     }
 
 //    @Test
