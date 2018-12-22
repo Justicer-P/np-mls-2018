@@ -61,8 +61,8 @@ public class UrlMonitorTest {
 	
 	@Test
 	public void testUrlMonitor() {
-		when(api.sumRequestGroupByURL(anyString(), anyString())).thenReturn(null);
-		urlMonitorService.urlMonitor(req, UrlMonitorType.URL_MONITOR, true);
+		when(api.sumRequestGroupByURL(anyString(), anyString())).thenReturn(m1);
+		System.out.println(urlMonitorService.urlMonitor(req, UrlMonitorType.URL_MONITOR, true));
 	}
 	
 }
