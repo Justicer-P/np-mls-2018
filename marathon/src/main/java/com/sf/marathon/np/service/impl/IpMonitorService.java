@@ -76,7 +76,7 @@ public class IpMonitorService implements IIpMonitorService {
 
 	private void firstIpMonitor(IpMonitorResp resp, List<String> ipRequestCount, List<String> ipFailCount,
 			List<String> xAxis, Map<String, Number[]> result) {
-		Set<String> srcIps = new HashSet<>(1);
+		Set<String> srcIps = new HashSet<>();
 		final boolean[] flag = new boolean[] { true };
 		final String[] ip = new String[] { "" };
 		result.forEach((k, v) -> {
@@ -85,6 +85,7 @@ public class IpMonitorService implements IIpMonitorService {
 			if (flag[0]) { // 第一个ip
 				ip[0] = tmpUrl;
 				setLists(ipRequestCount, ipFailCount, xAxis, k, v, index);
+				srcIps.add(tmpUrl);
 				flag[0] = false;
 			} else if (ip[0].equals(tmpUrl)) { // 与第一个ip相等
 				setLists(ipRequestCount, ipFailCount, xAxis, k, v, index);
