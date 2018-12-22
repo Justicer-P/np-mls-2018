@@ -125,7 +125,7 @@ public class IpMonitorService implements IIpMonitorService {
 			resp.setRealTimeCount("0");
 			return resp;
 		}
-		final double[] count = new double[] {};
+		final double[] count = new double[] {1};
 		result.forEach((k, v) -> {
 			count[0] += v[0].doubleValue();
 		});
