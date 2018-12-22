@@ -111,7 +111,6 @@ public class IpMonitorService implements IIpMonitorService {
 
 	@Override
 	public IpMonitorResp realTimeMonitor(IpMonitorReq req) {
-		// TODO
 		IpMonitorResp resp = new IpMonitorResp();
 		return resp;
 	}
@@ -121,8 +120,12 @@ public class IpMonitorService implements IIpMonitorService {
 		IpMonitorResp resp = new IpMonitorResp();
 		Map<String, Number[]> result = new HashMap<>();
 		result.putAll(api.groupBySourceIP(req.getBeginTime(), req.getEndTime()));
-		result.putAll(api.groupByDestIP(req.getBeginTime(), req.getEndTime()));
-		final double[] count = new double[] {};
+//		result.putAll(api.groupByDestIP(req.getBeginTime(), req.getEndTime()));
+		if (result.size() == 0) {
+			resp.setRealTimeCount("0");
+			return resp;
+		}
+		final double[] count = new double[] {1};
 		result.forEach((k, v) -> {
 			count[0] += v[0].doubleValue();
 		});
