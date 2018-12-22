@@ -41,7 +41,7 @@ public class UrlMonitorService implements IUrlMonitorService {
 			List<String> urlFailCount = new ArrayList<>();
 			if (isFirst) {
 				result = api.sumRequestGroupByURL(req.getBeginTime(), req.getEndTime());
-				Set<String> urls = new HashSet<>(1);
+				Set<String> urls = new HashSet<>();
 				final boolean[] flag = new boolean[] { true };
 				final String[] url = new String[] { "" };
 				result.forEach((k, v) -> {
@@ -50,8 +50,9 @@ public class UrlMonitorService implements IUrlMonitorService {
 					if (flag[0]) { // 第一条url
 						url[0] = tmpUrl;
 						setUrlMonitor(xAxis, urlRequestCount, urlFailCount, k, v, index);
+						urls.add(tmpUrl);
 						flag[0] = false;
-					} else if (tmpUrl == url[0]) { // 与第一条url相等
+					} else if (url[0].equals(tmpUrl)) { // 与第一条url相等
 						setUrlMonitor(xAxis, urlRequestCount, urlFailCount, k, v, index);
 					} else {
 						urls.add(tmpUrl);
@@ -81,7 +82,7 @@ public class UrlMonitorService implements IUrlMonitorService {
 			List<String> ninetyPercentRespTime = new ArrayList<>();
 			if (isFirst) {
 				result = api.mulTiAggregation(req.getBeginTime(), req.getEndTime());
-				Set<String> urls = new HashSet<>(1);
+				Set<String> urls = new HashSet<>();
 				final boolean[] flag = new boolean[] { true };
 				final String[] url = new String[] { "" };
 				result.forEach((k, v) -> {
@@ -91,8 +92,9 @@ public class UrlMonitorService implements IUrlMonitorService {
 						url[0] = tmpUrl;
 						setMonitorSummary(xAxis, longestRespTime, shortestRespTime, avgRespTime, ninetyPercentRespTime, k, v,
 								index);
+						urls.add(tmpUrl);
 						flag[0] = false;
-					} else if (tmpUrl == url[0]) { // 与第一条url相等
+					} else if (url[0].equals(tmpUrl)) { // 与第一条url相等
 						setMonitorSummary(xAxis, longestRespTime, shortestRespTime, avgRespTime, ninetyPercentRespTime, k, v,
 								index);
 					} else {
@@ -133,7 +135,7 @@ public class UrlMonitorService implements IUrlMonitorService {
 		List<String> xAxis = new ArrayList<>();
 		List<String> urlRequestCount = new ArrayList<>();
 		List<String> urlFailCount = new ArrayList<>();
-		Set<String> urls = new HashSet<>(1);
+		Set<String> urls = new HashSet<>();
 		final boolean[] flag = new boolean[] { true };
 		final String[] url = new String[] { "" };
 		result.forEach((k, v) -> {
@@ -142,6 +144,7 @@ public class UrlMonitorService implements IUrlMonitorService {
 			if (flag[0]) { // 第一条url
 				url[0] = tmpUrl;
 				setUrlMonitor(xAxis, urlRequestCount, urlFailCount, k, v, index);
+				urls.add(tmpUrl);
 				flag[0] = false;
 			} else if (tmpUrl == url[0]) { // 与第一条url相等
 				setUrlMonitor(xAxis, urlRequestCount, urlFailCount, k, v, index);
@@ -166,7 +169,7 @@ public class UrlMonitorService implements IUrlMonitorService {
 		List<String> shortestRespTime = new ArrayList<>();
 		List<String> avgRespTime = new ArrayList<>();
 		List<String> ninetyPercentRespTime = new ArrayList<>();
-		Set<String> urls = new HashSet<>(1);
+		Set<String> urls = new HashSet<>();
 		final boolean[] flag = new boolean[] { true };
 		final String[] url = new String[] { "" };
 		result.forEach((k, v) -> {
@@ -176,6 +179,7 @@ public class UrlMonitorService implements IUrlMonitorService {
 				url[0] = tmpUrl;
 				setMonitorSummary(xAxis, longestRespTime, shortestRespTime, avgRespTime, ninetyPercentRespTime, k, v,
 						index);
+				urls.add(tmpUrl);
 				flag[0] = false;
 			} else if (tmpUrl == url[0]) { // 与第一条url相等
 				setMonitorSummary(xAxis, longestRespTime, shortestRespTime, avgRespTime, ninetyPercentRespTime, k, v,

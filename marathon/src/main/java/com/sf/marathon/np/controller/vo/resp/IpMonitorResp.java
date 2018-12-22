@@ -13,9 +13,6 @@ public class IpMonitorResp implements Serializable {
 	// srcOrDestIps
 	private List<String> srcOrDestIps;
 
-	// ips
-	private List<String> ips;
-
 	// 请求数
 	private List<String> ipRequestCount;
 
@@ -48,14 +45,6 @@ public class IpMonitorResp implements Serializable {
 
 	public void setSrcOrDestIps(List<String> srcOrDestIps) {
 		this.srcOrDestIps = srcOrDestIps;
-	}
-
-	public List<String> getIps() {
-		return ips;
-	}
-
-	public void setIps(List<String> ips) {
-		this.ips = ips;
 	}
 
 	public List<String> getIpRequestCount() {

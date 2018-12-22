@@ -24,7 +24,7 @@ public class APITest {
     @Test
     public void mulTiAggregation() {
 
-        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-11-29 14:10", "2018-11-29 15:30");
+        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-12-22 00:10", "2018-12-23 00:10");
         System.out.println("stringMap = " + stringMap);
         for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
             System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
@@ -51,7 +51,7 @@ public class APITest {
 
         for (int i = 0; i < 3; i++) {
             LogData logData = new LogData();
-            logData.setReqTime("2018-12-23 14:14");
+            logData.setReqTime("2018-12-13 14:14");
 //            logData.setUrl(IndexClient.MARATHON + "express" + i + IndexClient.MARATHON + "pickupservice" + IndexClient.MARATHON + "getTaskDetail");
             logData.setUrl("/express/pickservice");
             logData.setMaxReponseTime(4.51d);
@@ -71,7 +71,7 @@ public class APITest {
 
         for (int i = 0; i < 3; i++) {
             LogData logData = new LogData();
-            logData.setReqTime("2018-11-28 14:14");
+            logData.setReqTime("2018-12-22 14:14");
 //            logData.setUrl(IndexClient.MARATHON + "express" + i + IndexClient.MARATHON + "pickupservice" + IndexClient.MARATHON + "getTaskDetail");
             logData.setUrl("/express/deliveryservice");
             logData.setRequestTimes(30 + i);
@@ -85,13 +85,11 @@ public class APITest {
 
     @Test
     public void BATCHsaveSourceIP() {
-        EsConfig.getInstance().setClusterName("elasticsearch");
-        EsConfig.getInstance().setEsUrl("localhost:9300");
         ArrayList<LogData> objects = Lists.newArrayList();
 
         for (int i = 0; i < 10; i++) {
             LogData logData = new LogData();
-            logData.setReqTime("2018-12-26 14:1" + i);
+            logData.setReqTime("2018-11-14 14:1" + i);
 //        logData.setUrl(IndexClient.MARATHON+"express"+IndexClient.MARATHON+"pickupservice"+IndexClient.MARATHON+"getTaskDetail");
             logData.setSourceIp("10.202.106.1" + i);
             logData.setRequestTimes(20);
@@ -155,7 +153,7 @@ public class APITest {
 
     @Test
     public void sumRequestGroupByURL() {
-        Map<String, Number[]> stringMap = api.sumRequestGroupByURL("2018-12-02 14:10", "2018-12-02 15:30");
+        Map<String, Number[]> stringMap = api.sumRequestGroupByURL("2018-12-22 00:10", "2018-12-23 15:30");
         for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
             System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));
         }
