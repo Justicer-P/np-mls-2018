@@ -27,7 +27,9 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.NumericMetricsAggregation;
 import org.elasticsearch.search.sort.GeoDistanceSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +47,7 @@ import java.util.Map;
  * @author 204062
  * @since 1.0
  */
+@Component
 public class IndexClient implements IIndexClient {
     private static final String GROUP_KEY_SPLITTER = "~";
     public static final int DEFAULT_PARTITION = 5;
@@ -143,22 +146,29 @@ public class IndexClient implements IIndexClient {
             SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
             return getDataMapWithMultiFieldResult(groupBy, aggregationClauses, searchResponse);
         } catch (Exception e) {
+            e.printStackTrace();
             if (ExceptionUtils.isException(e, IndexMissingException.class)) {
                 IndexAdminClient indexAdminClient = new IndexAdminClient();
                 indexAdminClient.createDb(indices[0]);
-                indexAdminClient.createTable(indices[0], type, Lists.newArrayList(FieldType.type("reqTime", IndexFieldType.LONG),
-                        FieldType.type("sourceip"), FieldType.type("destip"), FieldType.type("requestTimes", IndexFieldType.INT)
-                        , FieldType.type("url"), FieldType.type("errorTimes", IndexFieldType.INT)
-                        , FieldType.type("minReponseTime", IndexFieldType.DOUBLE),
-                        FieldType.type("minReponseTime", IndexFieldType.DOUBLE),
-                        FieldType.type("ninePercentResponseTime", IndexFieldType.DOUBLE)
-                ), true);
+                indexAdminClient.createTable(indices[0], type, getFieldTypes(), true);
+
                 return mulTiAggregation(type, searchClause, groupBy, indices);
             } else {
                 throw e;
             }
 
         }
+    }
+
+    private ArrayList<FieldType> getFieldTypes() {
+        return Lists.newArrayList(FieldType.type("reqTime", IndexFieldType.DATE),
+                FieldType.type("sourceip"), FieldType.type("destip"), FieldType.type("requestTimes", IndexFieldType.INT)
+                , FieldType.type("requrl"), FieldType.type("errorTimes", IndexFieldType.INT)
+                , FieldType.type("maxResponseTime", IndexFieldType.DOUBLE),
+                FieldType.type("minResponseTime", IndexFieldType.DOUBLE),
+                FieldType.type("avgResponseTime", IndexFieldType.DOUBLE),
+                FieldType.type("ninePercentResponseTime", IndexFieldType.DOUBLE)
+        );
     }
 
     @Override
@@ -189,14 +199,7 @@ public class IndexClient implements IIndexClient {
                 IndexAdminClient indexAdminClient = new IndexAdminClient();
                 String index = "log_" + logDatas.get(0).getReqTime().substring(0, 10);
                 indexAdminClient.createDb(index);
-                indexAdminClient.createTable(index, logDatas.get(0).getType().toString(), Lists.newArrayList(FieldType.type("reqTime", IndexFieldType.DATE),
-                        FieldType.type("sourceip"), FieldType.type("destip"), FieldType.type("requestTimes", IndexFieldType.INT)
-                        , FieldType.type("requrl"), FieldType.type("errorTimes", IndexFieldType.INT)
-                        , FieldType.type("maxResponseTime", IndexFieldType.DOUBLE),
-                        FieldType.type("minResponseTime", IndexFieldType.DOUBLE),
-                        FieldType.type("avgResponseTime", IndexFieldType.DOUBLE),
-                        FieldType.type("ninePercentResponseTime", IndexFieldType.DOUBLE)
-                ), true);
+                indexAdminClient.createTable(index, logDatas.get(0).getType().toString(), getFieldTypes(), true);
 
                 batchSave(logDatas);
             }
@@ -228,14 +231,7 @@ public class IndexClient implements IIndexClient {
             if (ExceptionUtils.isException(e, IndexMissingException.class)) {
                 IndexAdminClient indexAdminClient = new IndexAdminClient();
                 indexAdminClient.createDb(index);
-                indexAdminClient.createTable(index, type, Lists.newArrayList(FieldType.type("reqTime", IndexFieldType.DATE),
-                        FieldType.type("sourceip"), FieldType.type("destip"), FieldType.type("requestTimes", IndexFieldType.INT)
-                        , FieldType.type("requrl"), FieldType.type("errorTimes", IndexFieldType.INT)
-                        , FieldType.type("maxResponseTime", IndexFieldType.DOUBLE),
-                        FieldType.type("minResponseTime", IndexFieldType.DOUBLE),
-                        FieldType.type("avgResponseTime", IndexFieldType.DOUBLE),
-                        FieldType.type("ninePercentResponseTime", IndexFieldType.DOUBLE)
-                ), true);
+                indexAdminClient.createTable(index, type, getFieldTypes(), true);
                 save(index, type, dataMap);
             } else {
                 throw e;

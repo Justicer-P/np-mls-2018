@@ -21,6 +21,7 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.GeoDistanceSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -46,14 +47,10 @@ import static com.sf.marathon.np.index.client.IndexClient.PAGING_THRESHOLD;
  */
 @Component
 public class API {
-//    static {
-//        EsConfig instance = EsConfig.getInstance();
-//        instance.setEsUrl("10.203.97.8:9300");
-//        instance.setClusterName("elasticsearch");
-//    }
+    @Autowired
+    private IndexClient indexClient;
 
     public void save(LogData logData) {
-        IndexClient indexClient = new IndexClient();
         Map<String, Object> dataMap = Maps.newHashMap();
         DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
         String sss = logData.getReqTime();
@@ -73,7 +70,6 @@ public class API {
 
 
     public void batchSave(List<LogData> logDatas) {
-        IndexClient indexClient = new IndexClient();
         indexClient.batchSave(logDatas);
     }
 
@@ -161,7 +157,6 @@ public class API {
                 new AggregationClause(AVG, "avgResponseTime"),
                 new AggregationClause(AVG, "ninePercentResponseTime")}
                 , "reqTime", "requrl");
-        IndexClient indexClient = new IndexClient();
         DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
         long start = DateTime.parse(startTime, format).toDate().getTime();
         long end = DateTime.parse(endTime, format).toDate().getTime();
@@ -180,7 +175,6 @@ public class API {
     public Map<String, Number[]> sumRequestGroupByURL(String startTime, String endTime, String url) {
         GroupBy groupBy = new GroupBy(new AggregationClause[]{new AggregationClause(SUM, "requestTimes"), new AggregationClause(SUM, "errorTimes")}
                 , "reqTime", "requrl");
-        IndexClient indexClient = new IndexClient();
         DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
         long start = DateTime.parse(startTime, format).toDate().getTime();
         long end = DateTime.parse(endTime, format).toDate().getTime();
