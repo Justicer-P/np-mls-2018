@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sf.marathon.np.common.UrlMonitorType;
 import com.sf.marathon.np.controller.vo.req.UrlMonitorReq;
-import com.sf.marathon.np.controller.vo.resp.AllUrlsResp;
 import com.sf.marathon.np.controller.vo.resp.RestResponse;
 import com.sf.marathon.np.controller.vo.resp.UrlMonitorResp;
 import com.sf.marathon.np.service.IUrlMonitorService;
@@ -19,12 +18,6 @@ public class UrlMonitorController extends BaseController{
 	
 	@Autowired
 	private IUrlMonitorService urlMonitorService;
-	
-	@PostMapping("/getAllUrls")
-	@ResponseBody
-	public RestResponse<AllUrlsResp> getAllUrls() {
-		return handle(r -> r.setResult(urlMonitorService.getAllUrls()));
-	}
 	
 	@PostMapping("/firstUrlMonitor")
 	@ResponseBody

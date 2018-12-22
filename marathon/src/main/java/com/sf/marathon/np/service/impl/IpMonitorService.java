@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.sf.marathon.np.common.IpType;
 import com.sf.marathon.np.controller.vo.req.IpMonitorReq;
-import com.sf.marathon.np.controller.vo.resp.AllIpsResp;
 import com.sf.marathon.np.controller.vo.resp.IpMonitorResp;
 import com.sf.marathon.np.index.api.API;
 import com.sf.marathon.np.service.IIpMonitorService;
@@ -24,11 +23,6 @@ public class IpMonitorService implements IIpMonitorService {
 
 	@Autowired
 	private API api;
-
-	@Override
-	public AllIpsResp getAllIps() {
-		return null;
-	}
 
 	@Override
 	public IpMonitorResp ipMonitor(String type, IpMonitorReq req, boolean isFirst) throws Exception {
@@ -83,7 +77,11 @@ public class IpMonitorService implements IIpMonitorService {
 		Set<String> srcIps = new HashSet<>();
 		final boolean[] flag = new boolean[] { true };
 		final String[] ip = new String[] { "" };
-		result.forEach((k, v) -> {
+		Map<String, Number[]> sortedMap = new TreeMap<>((m1, m2) -> {
+			return m1.substring(0, m1.indexOf("~")).compareTo(m2.substring(0, m2.indexOf("~")));
+		});
+		sortedMap.putAll(result);
+		sortedMap.forEach((k, v) -> {
 			int index = k.indexOf("~");
 			String tmpUrl = k.substring(index + 1);
 			if (flag[0]) { // 第一个ip
@@ -107,12 +105,6 @@ public class IpMonitorService implements IIpMonitorService {
 		xAxis.add(time);
 		ipRequestCount.add(String.valueOf(v[0]));
 		ipFailCount.add(String.valueOf(v[1]));
-	}
-
-	@Override
-	public IpMonitorResp realTimeMonitor(IpMonitorReq req) {
-		IpMonitorResp resp = new IpMonitorResp();
-		return resp;
 	}
 
 	@Override
