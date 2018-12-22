@@ -183,9 +183,16 @@ public class API {
         if (!StringUtil.isEmpty(url)) {
             searchClause.and().equal("requrl", url);
         }
-        return indexClient.mulTiAggregation(GroupType.URL_TIME.toString(), searchClause, groupBy, IndexClient.getDBName("log_" + startTime.substring(0, 10), GroupType.URL_TIME.toString()));
+        return indexClient.mulTiAggregation(GroupType.URL_TYPE.toString(), searchClause, groupBy, IndexClient.getDBName("log_" + startTime.substring(0, 10), GroupType.URL_TYPE.toString()));
     }
 
+    /**
+     * 请求成功失败次数
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     */
     public Map<String, Number[]> sumRequestGroupByURL(String startTime, String endTime) {
         return sumRequestGroupByURL(startTime, endTime, null);
     }
@@ -205,7 +212,7 @@ public class API {
         if (!StringUtil.isEmpty(sourceIp)) {
             searchClause.and().equal("sourceip", sourceIp);
         }
-        return indexClient.mulTiAggregation(GroupType.SOURCEIP.toString(), searchClause, groupBy, IndexClient.getDBName("log_" + startTime.substring(0, 10), GroupType.SOURCEIP.toString()));
+        return indexClient.mulTiAggregation(GroupType.SOURCEIP.toString(), SearchClause.newClause(), groupBy, IndexClient.getDBName("log_" + startTime.substring(0, 10), GroupType.SOURCEIP.toString()));
     }
 
     public Map<String, Number[]> groupByDestIP(String startTime, String endTime, String destIp) {
