@@ -51,7 +51,7 @@ public class UrlMonitorService implements IUrlMonitorService {
 						url[0] = tmpUrl;
 						setUrlMonitor(xAxis, urlRequestCount, urlFailCount, k, v, index);
 						flag[0] = false;
-					} else if (tmpUrl == url[0]) { // 与第一条url相等
+					} else if (url[0].equals(tmpUrl)) { // 与第一条url相等
 						setUrlMonitor(xAxis, urlRequestCount, urlFailCount, k, v, index);
 					} else {
 						urls.add(tmpUrl);
@@ -92,7 +92,7 @@ public class UrlMonitorService implements IUrlMonitorService {
 						setMonitorSummary(xAxis, longestRespTime, shortestRespTime, avgRespTime, ninetyPercentRespTime, k, v,
 								index);
 						flag[0] = false;
-					} else if (tmpUrl == url[0]) { // 与第一条url相等
+					} else if (url[0].equals(tmpUrl)) { // 与第一条url相等
 						setMonitorSummary(xAxis, longestRespTime, shortestRespTime, avgRespTime, ninetyPercentRespTime, k, v,
 								index);
 					} else {
