@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sf.marathon.np.common.IpType;
 import com.sf.marathon.np.controller.vo.req.IpMonitorReq;
-import com.sf.marathon.np.controller.vo.resp.AllIpsResp;
 import com.sf.marathon.np.controller.vo.resp.IpMonitorResp;
 import com.sf.marathon.np.controller.vo.resp.RestResponse;
 import com.sf.marathon.np.service.IIpMonitorService;
@@ -19,12 +18,6 @@ public class IpMonitorController extends BaseController{
 	
 	@Autowired
 	private IIpMonitorService ipMonitorService;
-	
-	@PostMapping("/getAllIps")
-	@ResponseBody
-	public RestResponse<AllIpsResp> getAllIps() {
-		return handle(r -> r.setResult(ipMonitorService.getAllIps()));
-	}
 	
 	@PostMapping("/firstSourceIpMonitor")
 	@ResponseBody
@@ -72,12 +65,6 @@ public class IpMonitorController extends BaseController{
 				r.setMsg(e.getMessage());
 			}
 		});
-	}
-	
-	@PostMapping("/realTimeMonitor")
-	@ResponseBody
-	public RestResponse<IpMonitorResp> realTimeMonitor(IpMonitorReq req) {
-		return handle(r -> r.setResult(ipMonitorService.realTimeMonitor(req)));
 	}
 	
 	@PostMapping("/realTimeMonitorWithAllIps")
