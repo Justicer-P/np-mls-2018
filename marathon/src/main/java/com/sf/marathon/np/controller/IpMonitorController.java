@@ -81,4 +81,10 @@ public class IpMonitorController extends BaseController{
 		return handle(r -> r.setResult(ipMonitorService.realTimeMonitor(req)));
 	}
 	
+	@PostMapping("/realTimeMonitorWithAllIps")
+	@ResponseBody
+	public RestResponse<IpMonitorResp> realTimeMonitorWithAllIps(@RequestBody IpMonitorReq req) {
+		return handle(r -> r.setResult(ipMonitorService.realTimeMonitorWithAllIps(req)));
+	}
+	
 }
