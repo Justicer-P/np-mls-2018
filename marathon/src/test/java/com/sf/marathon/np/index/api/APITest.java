@@ -51,7 +51,7 @@ public class APITest {
 
         for (int i = 0; i < 3; i++) {
             LogData logData = new LogData();
-            logData.setReqTime("2018-12-29 14:14");
+            logData.setReqTime("2018-12-23 14:14");
 //            logData.setUrl(IndexClient.MARATHON + "express" + i + IndexClient.MARATHON + "pickupservice" + IndexClient.MARATHON + "getTaskDetail");
             logData.setUrl("/express/pickservice");
             logData.setMaxReponseTime(4.51d);
@@ -125,7 +125,7 @@ public class APITest {
     @Test
     public void mulTiAggregationByUrl() {
 
-        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-11-29 14:10", "2018-11-29 15:30", "/express/deliveryservice");
+        Map<String, Number[]> stringMap = api.mulTiAggregation("2018-12-22 14:10", "2018-12-22 15:30");
         System.out.println("stringMap = " + stringMap);
         for (Map.Entry<String, Number[]> entry : stringMap.entrySet()) {
             System.out.println("entry = " + entry.getKey() + "--" + Arrays.toString(entry.getValue()));

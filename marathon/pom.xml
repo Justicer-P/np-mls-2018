@@ -95,41 +95,57 @@
 				<version>2.0.1.RELEASE</version>
 			</plugin>
 
+			<!--<plugin>-->
+			<!--<groupId>org.apache.maven.plugins</groupId>-->
+			<!--<artifactId>maven-jar-plugin</artifactId>-->
+			<!--<version>2.4</version>-->
+			<!--&lt;!&ndash;<configuration>&ndash;&gt;-->
+			<!--&lt;!&ndash;<excludes>&ndash;&gt;-->
+			<!--&lt;!&ndash;<exclude>dubbo/dubbo.properties</exclude>&ndash;&gt;-->
+			<!--&lt;!&ndash;<exclude>dubbo/dubbo.properties.autocfg</exclude>&ndash;&gt;-->
+			<!--&lt;!&ndash;<exclude>application.properties</exclude>&ndash;&gt;-->
+			<!--&lt;!&ndash;<exclude>log4j2.xml</exclude>&ndash;&gt;-->
+			<!--&lt;!&ndash;</excludes>&ndash;&gt;-->
+			<!--&lt;!&ndash;</configuration>&ndash;&gt;-->
+			<!--</plugin>-->
+
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<excludes>
-						<exclude>dubbo/dubbo.properties</exclude>
-						<exclude>dubbo/dubbo.properties.autocfg</exclude>
-						<exclude>application.properties</exclude>
-						<exclude>log4j2.xml</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2.1</version>
-				<configuration>
-					<appendAssemblyId>false</appendAssemblyId>
-					<descriptors>
-						<descriptor>src/main/assembly/assembly.xml</descriptor>
-					</descriptors>
-					<skipAssembly>false</skipAssembly>
-					<finalName>${project.artifactId}-assembly-${project.version}</finalName>
+					<fork>true</fork>
+					<mainClass>com.sf.marathon.np.ManagerApplication</mainClass>
 				</configuration>
 				<executions>
 					<execution>
-						<id>make-assembly-uniform</id>
-						<phase>package</phase>
 						<goals>
-							<goal>single</goal>
+							<goal>repackage</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
+			<!--<plugin>-->
+			<!--<groupId>org.apache.maven.plugins</groupId>-->
+			<!--<artifactId>maven-assembly-plugin</artifactId>-->
+			<!--<version>2.2.1</version>-->
+			<!--<configuration>-->
+			<!--<appendAssemblyId>false</appendAssemblyId>-->
+			<!--<descriptors>-->
+			<!--<descriptor>src/main/assembly/assembly.xml</descriptor>-->
+			<!--</descriptors>-->
+			<!--<skipAssembly>false</skipAssembly>-->
+			<!--<finalName>${project.artifactId}-assembly-${project.version}</finalName>-->
+			<!--</configuration>-->
+			<!--<executions>-->
+			<!--<execution>-->
+			<!--<id>make-assembly-uniform</id>-->
+			<!--<phase>package</phase>-->
+			<!--<goals>-->
+			<!--<goal>single</goal>-->
+			<!--</goals>-->
+			<!--</execution>-->
+			<!--</executions>-->
+			<!--</plugin>-->
 		</plugins>
 	</build>
 
