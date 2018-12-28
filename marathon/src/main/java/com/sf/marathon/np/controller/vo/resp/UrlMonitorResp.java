@@ -106,4 +106,12 @@ public class UrlMonitorResp implements Serializable{
 		this.ninetyPercentRespTime = ninetyPercentRespTime;
 	}
 
+	@Override
+	public String toString() {
+		return "UrlMonitorResp [url=" + url + ", urls=" + urls + ", urlRequestCount=" + urlRequestCount
+				+ ", urlFailCount=" + urlFailCount + ", xAxis=" + xAxis + ", longestRespTime=" + longestRespTime
+				+ ", shortestRespTime=" + shortestRespTime + ", avgRespTime=" + avgRespTime + ", ninetyPercentRespTime="
+				+ ninetyPercentRespTime + "]";
+	}
+
 }
