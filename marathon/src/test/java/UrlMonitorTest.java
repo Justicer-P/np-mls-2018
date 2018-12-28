@@ -10,7 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.sf.marathon.np.common.UrlMonitorType;
 import com.sf.marathon.np.controller.vo.req.UrlMonitorReq;
@@ -18,7 +19,7 @@ import com.sf.marathon.np.index.api.API;
 import com.sf.marathon.np.service.IUrlMonitorService;
 import com.sf.marathon.np.service.impl.UrlMonitorService;
 
-@RunWith(SpringRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 //@SpringBootTest
 //@SpringBootConfiguration
 public class UrlMonitorTest {
@@ -44,6 +45,10 @@ public class UrlMonitorTest {
 	
 	@Before
 	public void before() {
+		
+		// 初始化mockito，与@RunWith(MockitoJUnitRunner.class)注解二选一即可
+		MockitoAnnotations.initMocks(this);
+		
 		req = new UrlMonitorReq();
 		req.setBeginTime("");
 		req.setUrl("");
