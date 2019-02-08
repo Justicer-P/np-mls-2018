@@ -35,7 +35,8 @@ public class UrlMonitorService implements IUrlMonitorService {
 			if (isFirst) {
 				result = api.sumRequestGroupByURL(req.getBeginTime(), req.getEndTime());
 				Map<String, Number[]> sortedMap = new TreeMap<>((m1, m2) -> {
-					return m1.substring(0, m1.indexOf("~")).compareTo(m2.substring(0, m2.indexOf("~")));
+					int r = m1.substring(0, m1.indexOf("~")).compareTo(m2.substring(0, m2.indexOf("~")));
+					return r == 0 ? m1.compareTo(m2) : r;
 				});
 				sortedMap.putAll(result);
 				Set<String> urls = new HashSet<>();
@@ -60,7 +61,8 @@ public class UrlMonitorService implements IUrlMonitorService {
 			} else {
 				result = api.sumRequestGroupByURL(req.getBeginTime(), req.getEndTime(), req.getUrl());
 				Map<String, Number[]> sortedMap = new TreeMap<>((m1, m2) -> {
-					return m1.substring(0, m1.indexOf("~")).compareTo(m2.substring(0, m2.indexOf("~")));
+					int r = m1.substring(0, m1.indexOf("~")).compareTo(m2.substring(0, m2.indexOf("~")));
+					return r == 0 ? m1.compareTo(m2) : r;
 				});
 				sortedMap.putAll(result);
 				sortedMap.forEach((k, v) -> {
@@ -80,7 +82,8 @@ public class UrlMonitorService implements IUrlMonitorService {
 			if (isFirst) {
 				result = api.mulTiAggregation(req.getBeginTime(), req.getEndTime());
 				Map<String, Number[]> sortedMap = new TreeMap<>((m1, m2) -> {
-					return m1.substring(0, m1.indexOf("~")).compareTo(m2.substring(0, m2.indexOf("~")));
+					int r = m1.substring(0, m1.indexOf("~")).compareTo(m2.substring(0, m2.indexOf("~")));
+					return r == 0 ? m1.compareTo(m2) : r;
 				});
 				sortedMap.putAll(result);
 				Set<String> urls = new HashSet<>();
@@ -140,7 +143,7 @@ public class UrlMonitorService implements IUrlMonitorService {
 	private void setMonitorSummary(List<String> xAxis, List<String> longestRespTime, List<String> shortestRespTime,
 			List<String> avgRespTime, List<String> ninetyPercentRespTime, String k, Number[] v, int index) {
 		setUrlMonitor(xAxis, longestRespTime, shortestRespTime, k, v, index);
-		avgRespTime.add(String.valueOf(v[1]));
+		avgRespTime.add(String.valueOf(v[0]));
 		ninetyPercentRespTime.add(String.valueOf(v[1]));
 	}
 
